@@ -1,16 +1,21 @@
 package com.casa.services;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.casa.domain.dtos.DiaModificarDto;
 import com.casa.domain.dtos.DiaRegistroDto;
+import com.casa.domain.entities.DiaEntity;
 import com.casa.domain.mappers.DiaMapper;
 import com.casa.repositories.DiaRepository;
+import com.casa.utils.Constantes;
 
 @Service
 public class DiaService {
@@ -20,10 +25,35 @@ public class DiaService {
 	@Autowired
 	private DiaRepository diaRepository;
 	
-	public Map<String, Object> registrar(DiaRegistroDto dia) {
-		log.info("DiaService.class - registrar -> Registrando dia");
+	public DiaEntity consultarPorId(Long id) {
+		log.info("DiaService.class - consultarPorId() -> Consultado por Id");
+		Optional<DiaEntity> optional = diaRepository.findById(id);
+		return optional.orElse(null);
+	}
+	
+	public Map<String, Object> modificar(DiaModificarDto dia) {
+		log.info("DiaService.class - modificar() -> Modificando dia");
 		Map<String, Object> map = new HashMap<>();
-		map.put("response", diaRepository.save(DiaMapper.convertirDtoAEntity(dia)).getId());
+		if(consultarPorId(dia.getId()) != null) {
+			map.put("respuesta", diaRepository.modificarDia(dia.getId(), dia.getNombre(), Constantes.consultarFechaActual()));
+		} else {
+			map.put("error", 0);
+		}
+		return map;
+	}
+	
+	public List<DiaEntity> consultarTodos() {
+		log.info("DiaService.class - consultarTodos() -> Consultando todos");
+		return diaRepository.findAll();
+	}
+	
+	public Map<String, Object> registrar(DiaRegistroDto dia) {
+		log.info("DiaService.class - registrar() -> Registrando dia");
+		Map<String, Object> map = new HashMap<>();
+		dia.setHoras(7);
+		dia.setFechaModificacion(Constantes.consultarFechaActual());
+		dia.setFechaRegistro(Constantes.consultarFechaActual());
+		map.put("respuesta", diaRepository.save(DiaMapper.convertirDtoAEntity(dia)).getId());
 		return map;
 	}
 

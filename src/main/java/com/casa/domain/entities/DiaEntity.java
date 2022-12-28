@@ -27,7 +27,7 @@ public class DiaEntity {
     @Column(nullable = false, length = 10)
 	private Long id;
 	
-	@Column(nullable = false, length = 8, unique = true)
+	@Column(nullable = false, length = 15)
 	private String nombre;
 	
 	@Column(nullable = false, length = 1)
