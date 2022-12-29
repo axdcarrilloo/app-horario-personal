@@ -40,7 +40,7 @@ public class DiaController {
 	
 	@GetMapping(value = Route.CONSULTAR)
 	public ResponseEntity<RespuestaPrincipalDto> consultarTodos() {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(Route.CONSULTAR, 
+		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA, 
 				diaSvc.consultarTodos()), HttpStatus.OK);
 	}
 	
