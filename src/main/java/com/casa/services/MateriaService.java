@@ -20,7 +20,7 @@ import com.casa.utils.Constantes;
 @Service
 public class MateriaService {
 	
-	private final Logger log = LoggerFactory.getLogger(DiaService.class);
+	private final Logger log = LoggerFactory.getLogger(MateriaService.class);
 	
 	@Autowired
 	private MateriaRepository materiaRepository;
