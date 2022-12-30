@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.casa.domain.dtos.MateriaRegistroDto;
-import com.casa.domain.dtos.MateriamodificarDto;
+import com.casa.domain.dtos.ProfesorModificarDto;
+import com.casa.domain.dtos.ProfesorRegistroDto;
 import com.casa.domain.dtos.RespuestaPrincipalDto;
-import com.casa.services.MateriaService;
+import com.casa.services.ProfesorService;
 import com.casa.utils.Constantes;
 import com.casa.utils.Route;
 
 @RestController
-@RequestMapping(value = Route.MATERIA, produces = MediaType.APPLICATION_JSON_VALUE)
-public class MateriaController {
+@RequestMapping(value = Route.PROFESOR, produces = MediaType.APPLICATION_JSON_VALUE)
+public class ProfesorController {
 	
 	@Autowired
-	private MateriaService materiaSvc;
+	private ProfesorService profesorSvc;
 	
 	@PutMapping(value = Route.MODIFICAR)
-	public ResponseEntity<RespuestaPrincipalDto> modiicar(@RequestBody MateriamodificarDto materia) {
-		Map<String, Object> map = materiaSvc.modificar(materia);
+	public ResponseEntity<RespuestaPrincipalDto> modificar(@RequestBody ProfesorModificarDto profesor) {
+		Map<String, Object> map = profesorSvc.modificar(profesor);
 		String errorCamposVacios = (String)map.get("errorCamposVacios");
 		String errorNoExistente = (String)map.get("errorNoExistente");
 		if(errorCamposVacios != null) {
@@ -42,15 +42,15 @@ public class MateriaController {
 		}
 	}
 	
-	@GetMapping(value = Route.CONSULTAR_TAS)
-	public ResponseEntity<RespuestaPrincipalDto> consultarTodas() {
+	@GetMapping(value = Route.CONSULTAR_TOS)
+	public ResponseEntity<RespuestaPrincipalDto> consultarTodos() {
 		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA, 
-				materiaSvc.consultarTodas()), HttpStatus.OK);
+				profesorSvc.consultarTodos()), HttpStatus.OK);
 	}
-
+	
 	@PostMapping(value = Route.REGISTRAR)
-	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody MateriaRegistroDto materia) {
-		Map<String, Object> map = materiaSvc.registrar(materia);
+	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody ProfesorRegistroDto profesor) {
+		Map<String, Object> map = profesorSvc.registrar(profesor);
 		String errorCamposVacios = (String)map.get("errorCamposVacios");
 		if(errorCamposVacios != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
@@ -58,5 +58,5 @@ public class MateriaController {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.CREATED);
 		}
 	}
-		
+
 }

@@ -19,6 +19,6 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
 	@Modifying
     @Transactional
     @Query(value = ConstantesSQL.MODIFICAR_MATERIA, nativeQuery = true)
-	Integer modificarDia(@Param("id")Long id, @Param("nombre")String nombre, @Param("fechaModificacion")LocalDateTime fechaModificacion);
+	Integer modificar(@Param("id")Long id, @Param("nombre")String nombre, @Param("fechaModificacion")LocalDateTime fechaModificacion);
 
 }

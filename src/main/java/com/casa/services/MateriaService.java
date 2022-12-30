@@ -26,6 +26,7 @@ public class MateriaService {
 	private MateriaRepository materiaRepository;
 	
 	private Boolean validarCamposModificar(MateriamodificarDto materia) {
+		log.info("MateriaService.class - validarCamposModificar() -> Validando campos vacios...!");
 		Boolean validate = false;
 		if(materia.getId() == null) {
 			validate = true;
@@ -37,10 +38,12 @@ public class MateriaService {
 	}
 	
 	private Boolean validarCamposRegistrar(MateriaRegistroDto materia) {
+		log.info("MateriaService.class - validarCamposRegistrar() -> Validando campos vacios...!");
 		return materia.getNombre() == null;
 	}
 	
 	public MateriaEntity consultarPorId(Long id) {
+		log.info("MateriaService.class - consultarPorId() -> Consultado por Id una materia");
 		Optional<MateriaEntity> optional = materiaRepository.findById(id);
 		return optional.orElse(null);
 	}
@@ -56,7 +59,7 @@ public class MateriaService {
 			map.put("errorNoExistente", Constantes.MSG_NO_EXISTENTE);
 			return map;
 		} else {
-			map.put("respuesta", materiaRepository.modificarDia(materia.getId(), materia.getNombre(), Constantes.consultarFechaActual()));
+			map.put("respuesta", materiaRepository.modificar(materia.getId(), materia.getNombre(), Constantes.consultarFechaActual()));
 			return map;
 		}	
 	}

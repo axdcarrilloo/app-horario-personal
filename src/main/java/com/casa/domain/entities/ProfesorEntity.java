@@ -27,13 +27,16 @@ public class ProfesorEntity {
     @Column(nullable = false, length = 10)
 	private Long id;
 	
-	@Column(nullable = false, length = 50, unique = true)
+	@Column(nullable = false, length = 80, unique = true)
+	private String cedula;
+	
+	@Column(nullable = false, length = 50)
 	private String nombres;
 	
 	@Column(nullable = false, length = 50)
-	private String apelidos;
+	private String apellidos;
 	
-	@Column(nullable = false, length = 150)
+	@Column(nullable = false, length = 3)
 	private Integer edad;
 	
 	@Column(nullable = false, length = 13)

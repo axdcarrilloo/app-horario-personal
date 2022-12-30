@@ -25,8 +25,25 @@ public class DiaService {
 	@Autowired
 	private DiaRepository diaRepository;
 	
+	private Boolean validarCamposRegistrar(DiaRegistroDto dia) {
+		log.info("DiaService.class - validarCamposRegistrar() -> Validando campos vacios...!");
+		return dia.getNombre() == null;
+	}
+	
+	private Boolean validarCamposModificar(DiaModificarDto dia) {
+		log.info("DiaService.class - validarCamposModificar() -> Validando campos vacios...!");
+		Boolean validate = false;
+		if(dia.getId() == null) {
+			validate = true;
+		}
+		if(dia.getNombre() == null) {
+			validate = true;
+		}
+		return validate;
+	}
+	
 	public DiaEntity consultarPorId(Long id) {
-		log.info("DiaService.class - consultarPorId() -> Consultado por Id");
+		log.info("DiaService.class - consultarPorId() -> Consultado por Id un dia");
 		Optional<DiaEntity> optional = diaRepository.findById(id);
 		return optional.orElse(null);
 	}
@@ -34,26 +51,35 @@ public class DiaService {
 	public Map<String, Object> modificar(DiaModificarDto dia) {
 		log.info("DiaService.class - modificar() -> Modificando dia");
 		Map<String, Object> map = new HashMap<>();
-		if(consultarPorId(dia.getId()) != null) {
-			map.put("respuesta", diaRepository.modificarDia(dia.getId(), dia.getNombre(), Constantes.consultarFechaActual()));
+		if(Boolean.TRUE.equals(validarCamposModificar(dia))) {
+			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			return map;
+		} 
+		if(consultarPorId(dia.getId()) == null) {
+			map.put("errorNoExistente", Constantes.MSG_NO_EXISTENTE);
+			return map;
 		} else {
-			map.put("error", 0);
+			map.put("respuesta", diaRepository.modificarDia(dia.getId(), dia.getNombre(), Constantes.consultarFechaActual()));
+			return map;
 		}
-		return map;
 	}
 	
 	public List<DiaEntity> consultarTodos() {
-		log.info("DiaService.class - consultarTodos() -> Consultando todos");
+		log.info("DiaService.class - consultarTodos() -> Consultando todos los dias");
 		return diaRepository.findAll();
 	}
 	
 	public Map<String, Object> registrar(DiaRegistroDto dia) {
 		log.info("DiaService.class - registrar() -> Registrando dia");
 		Map<String, Object> map = new HashMap<>();
-		dia.setHoras(7);
-		dia.setFechaModificacion(Constantes.consultarFechaActual());
-		dia.setFechaRegistro(Constantes.consultarFechaActual());
-		map.put("respuesta", diaRepository.save(DiaMapper.convertirDtoAEntity(dia)).getId());
+		if(Boolean.TRUE.equals(validarCamposRegistrar(dia))) {
+			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+		} else {
+			dia.setHoras(7);
+			dia.setFechaModificacion(Constantes.consultarFechaActual());
+			dia.setFechaRegistro(Constantes.consultarFechaActual());
+			map.put("respuesta", diaRepository.save(DiaMapper.convertirDtoAEntity(dia)).getId());
+		}		
 		return map;
 	}
 
