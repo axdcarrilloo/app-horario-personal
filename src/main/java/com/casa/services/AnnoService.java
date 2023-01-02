@@ -22,12 +22,12 @@ public class AnnoService {
 	private AnnoRepository annoRepository;
 	
 	public List<AnnoEntity> consultarTodos() {
-		log.info("AnnoService.class - consultarTodos() -> Consultando todos los Años");
+		log.info("AnnoService.class - consultarTodos() -> Consultando todos los Años...!");
 		return annoRepository.findAll();
 	}
 	
 	public Long registrar(AnnoRegistrarDto anno) {
-		log.info("AnnoService.class - registrar() -> Registrando Año");
+		log.info("AnnoService.class - registrar() -> Registrando Año...!");
 		anno.setFechaModificacion(Constantes.consultarFechaActual());
 		anno.setFechaRegistro(Constantes.consultarFechaActual());
 		return annoRepository.save(AnnoMapper.convertirDtoAEntity(anno)).getId();

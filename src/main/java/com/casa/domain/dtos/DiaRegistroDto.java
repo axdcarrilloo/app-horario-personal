@@ -2,6 +2,8 @@ package com.casa.domain.dtos;
 
 import java.time.LocalDateTime;
 
+import com.casa.domain.entities.SemanaEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DiaRegistroDto {
+	
+	private SemanaEntity semana;
 	
 	private String nombre;
 	

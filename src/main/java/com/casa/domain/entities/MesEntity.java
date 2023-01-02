@@ -17,12 +17,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "dias")
+@Table(name = "meses")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiaEntity {
+public class MesEntity {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,14 +30,15 @@ public class DiaEntity {
 	private Long id;
 	
 	@ManyToOne
-    @JoinColumn(name = "id_semana", nullable = false, referencedColumnName = "id")
-	private SemanaEntity semana;
+    @JoinColumn(name = "id_anno", nullable = false, referencedColumnName = "id")
+	private AnnoEntity anno;
+	
+//	Numero del mes en el año
+	@Column(nullable = false, length = 3, name = "numero_mes_anno")
+	private Integer numeroMesAnno;
 	
 	@Column(nullable = false, length = 15)
 	private String nombre;
-	
-	@Column(nullable = false, length = 1)
-	private Integer horas;
 	
 	@Column(nullable = false, name = "fecha_registro")
 	private LocalDateTime fechaRegistro;
