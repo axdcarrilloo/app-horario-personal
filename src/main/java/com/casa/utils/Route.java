@@ -7,6 +7,7 @@ public class Route {
 	public static final String DIA = "/Dia";
 	public static final String MATERIA = "/Materia";
 	public static final String PROFESOR = "/Profesor";
+	public static final String ANNO = "/Año";
 	
 	public static final String CONSULTAR_TOS = "/ConsultarTodos";
 	public static final String CONSULTAR_TAS = "/ConsultarTodas";
