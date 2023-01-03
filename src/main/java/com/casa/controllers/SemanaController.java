@@ -42,7 +42,7 @@ public class SemanaController {
 		if(errorMesVacio != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorMesVacio), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, semanaSvc.registrar(semana)), HttpStatus.CREATED);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.CREATED);
 		}
 	}
 

@@ -54,15 +54,17 @@ private final Logger log = LoggerFactory.getLogger(SemanaService.class);
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(semana))) {
 			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			return map;
 		}
 		if(mesSvc.consultarPorId(semana.getMes().getId()) == null) {
 			map.put("errorMesVacio", Constantes.MSG_NO_EXISTENTE);
+			return map;
 		} else {
 			semana.setFechaModificacion(Constantes.consultarFechaActual());
 			semana.setFechaRegistro(Constantes.consultarFechaActual());
 			map.put("respuesta", semanaRepository.save(SemanaMapper.convertirDtoAEntity(semana)).getId());
-		}		
-		return map;
+			return map;
+		}
 	}
 
 }

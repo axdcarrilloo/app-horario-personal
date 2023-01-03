@@ -17,7 +17,7 @@ public class HorarioPersonal implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		log.info("HorarioPersonal - run() -> Iniciando servicios de Horario");
+		log.info("HorarioPersonal - run() -> Iniciando servicios de Horario...!");
 	}
 
 }

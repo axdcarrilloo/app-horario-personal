@@ -82,16 +82,18 @@ public class DiaService {
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(dia))) {
 			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			return map;
 		}
 		if(semanaSvc.consultarPorId(dia.getSemana().getId()) == null) {
 			map.put("errorSemanaVacia", Constantes.MSG_NO_EXISTENTE);
+			return map;
 		} else {
 			dia.setHoras(7);
 			dia.setFechaModificacion(Constantes.consultarFechaActual());
 			dia.setFechaRegistro(Constantes.consultarFechaActual());
 			map.put("respuesta", diaRepository.save(DiaMapper.convertirDtoAEntity(dia)).getId());
-		}		
-		return map;
+			return map;
+		}
 	}
 
 }

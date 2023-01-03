@@ -39,7 +39,7 @@ public class MateriaService {
 	}
 	
 	public MateriaEntity consultarPorId(Long id) {
-		log.info("MateriaService.class - consultarPorId() -> Consultado por Id una materia");
+		log.info("MateriaService.class - consultarPorId() -> Consultado por Id una materia...!");
 		Optional<MateriaEntity> optional = materiaRepository.findById(id);
 		return optional.orElse(null);
 	}

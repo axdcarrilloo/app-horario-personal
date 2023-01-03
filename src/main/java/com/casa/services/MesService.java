@@ -54,15 +54,17 @@ public class MesService {
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(mes))) {
 			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			return map;
 		}
 		if(annoSvc.consultarPorId(mes.getAnno().getId()) == null) {
 			map.put("errorAnnoVacio", Constantes.MSG_NO_EXISTENTE);
+			return map;
 		}else {
 			mes.setFechaModificacion(Constantes.consultarFechaActual());
 			mes.setFechaRegistro(Constantes.consultarFechaActual());
 			map.put("respuesta", mesRepository.save(MesMapper.convertirDtoAEntity(mes)).getId());
-		}		
-		return map;
+			return map;
+		}	
 	}
 	
 }
