@@ -3,6 +3,7 @@ package com.casa.services;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,9 @@ public class MesService {
 	@Autowired
 	private MesRepository mesRepository;
 	
+	@Autowired
+	private AnnoService annoSvc;
+	
 	private Boolean validarCamposRegistrar(MesRegistrarDto mes) {
 		log.info("MesService.class - validarCamposRegistrar() -> Validando campos vacios...!");
 		if(mes.getAnno() == null || mes.getAnno().getId() == null) {
@@ -32,6 +36,12 @@ public class MesService {
 			return true;
 		}
 		return mes.getNombre() == null;
+	}
+	
+	public MesEntity consultarPorId(Long id) {
+		log.info("MesService.class - consultarPorId() -> Consultando por Id un Mes...!");
+		Optional<MesEntity> optional = mesRepository.findById(id);
+		return optional.orElse(null);
 	}
 	
 	public List<MesEntity> consultarTodos() {
@@ -44,7 +54,10 @@ public class MesService {
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(mes))) {
 			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
-		} else {
+		}
+		if(annoSvc.consultarPorId(mes.getAnno().getId()) == null) {
+			map.put("errorAnnoVacio", Constantes.MSG_NO_EXISTENTE);
+		}else {
 			mes.setFechaModificacion(Constantes.consultarFechaActual());
 			mes.setFechaRegistro(Constantes.consultarFechaActual());
 			map.put("respuesta", mesRepository.save(MesMapper.convertirDtoAEntity(mes)).getId());

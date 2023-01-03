@@ -27,59 +27,51 @@ public class ProfesorService {
 	
 	private Boolean validarCamposModificar(ProfesorModificarDto profesor) {
 		log.info("ProfesorService.class - validarCamposModificar() -> Validando campos vacios...!");
-		Boolean validate = false;
 		if(profesor.getId() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getCedula() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getNombres() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getApellidos() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getEdad() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getCelular() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getDireccion() == null) {
-			validate = true;
+			return true;
 		}
-		if(profesor.getEmail() == null) {
-			validate = true;
-		}
-		return validate;
+		return profesor.getEmail() == null;
 	}
 	
 	private Boolean validarCamposRegistro(ProfesorRegistroDto profesor) {
 		log.info("ProfesorService.class - validarCamposRegistro() -> Validando campos vacios...!");
-		Boolean validate = false;
 		if(profesor.getCedula() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getNombres() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getApellidos() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getEdad() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getCelular() == null) {
-			validate = true;
+			return true;
 		}
 		if(profesor.getDireccion() == null) {
-			validate = true;
+			return true;
 		}
-		if(profesor.getEmail() == null) {
-			validate = true;
-		}
-		return validate;
+		return profesor.getEmail() == null;
 	}
 	
 	public Map<String, Object> modificar(ProfesorModificarDto profesor) {

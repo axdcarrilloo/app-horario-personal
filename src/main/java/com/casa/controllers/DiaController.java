@@ -31,14 +31,18 @@ public class DiaController {
 	public ResponseEntity<RespuestaPrincipalDto> modificar(@RequestBody DiaModificarDto dia) {
 		Map<String, Object> map = diaSvc.modificar(dia);
 		String errorCamposVacios = (String)map.get("errorCamposVacios");
+		String errorSemanaVacia = (String)map.get("errorSemanaVacia");
 		String errorNoExistente = (String)map.get("errorNoExistente");
 		if(errorCamposVacios != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} 
+		if(errorSemanaVacia != null) {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_MODIFICACION_FALLIDA, errorSemanaVacia), HttpStatus.NOT_FOUND);
+		}
 		if(errorNoExistente != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorNoExistente), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_MODIFICACION_FALLIDA, errorNoExistente), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.OK);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_MODIFICACION_EXITOSA, map.get("respuesta")), HttpStatus.OK);
 		}
 	}
 	
@@ -52,8 +56,12 @@ public class DiaController {
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody DiaRegistroDto dia) {
 		Map<String, Object> map = diaSvc.registrar(dia);
 		String errorCamposVacios = (String)map.get("errorCamposVacios");
+		String errorSemanaVacia = (String)map.get("errorSemanaVacia");
 		if(errorCamposVacios != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+		}
+		if(errorSemanaVacia != null) {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorSemanaVacia), HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.CREATED);
 		}

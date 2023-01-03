@@ -1,6 +1,7 @@
 package com.casa.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,12 @@ public class AnnoService {
 	
 	@Autowired
 	private AnnoRepository annoRepository;
+	
+	public AnnoEntity consultarPorId(Long id) {
+		log.info("AnnoService.class - consultarPorId() -> Consultando por Id un Año...!");
+		Optional<AnnoEntity> option = annoRepository.findById(id);
+		return option.orElse(null);
+	}
 	
 	public List<AnnoEntity> consultarTodos() {
 		log.info("AnnoService.class - consultarTodos() -> Consultando todos los Años...!");

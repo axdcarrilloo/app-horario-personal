@@ -25,21 +25,26 @@ public class DiaService {
 	@Autowired
 	private DiaRepository diaRepository;
 	
+	@Autowired
+	private SemanaService semanaSvc;
+	
 	private Boolean validarCamposRegistrar(DiaRegistroDto dia) {
 		log.info("DiaService.class - validarCamposRegistrar() -> Validando campos vacios...!");
+		if(dia.getSemana() == null || dia.getSemana().getId() == null) {
+			return true;
+		}
 		return dia.getNombre() == null;
 	}
 	
 	private Boolean validarCamposModificar(DiaModificarDto dia) {
 		log.info("DiaService.class - validarCamposModificar() -> Validando campos vacios...!");
-		Boolean validate = false;
 		if(dia.getId() == null) {
-			validate = true;
+			return true;
 		}
-		if(dia.getNombre() == null) {
-			validate = true;
+		if(dia.getSemana() == null || dia.getSemana().getId() == null) {
+			return true;
 		}
-		return validate;
+		return dia.getNombre() == null;
 	}
 	
 	public DiaEntity consultarPorId(Long id) {
@@ -54,7 +59,10 @@ public class DiaService {
 		if(Boolean.TRUE.equals(validarCamposModificar(dia))) {
 			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
 			return map;
-		} 
+		}
+		if(semanaSvc.consultarPorId(dia.getSemana().getId()) == null) {
+			map.put("errorSemanaVacia", Constantes.MSG_NO_EXISTENTE);
+		}
 		if(consultarPorId(dia.getId()) == null) {
 			map.put("errorNoExistente", Constantes.MSG_NO_EXISTENTE);
 			return map;
@@ -74,6 +82,9 @@ public class DiaService {
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(dia))) {
 			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+		}
+		if(semanaSvc.consultarPorId(dia.getSemana().getId()) == null) {
+			map.put("errorSemanaVacia", Constantes.MSG_NO_EXISTENTE);
 		} else {
 			dia.setHoras(7);
 			dia.setFechaModificacion(Constantes.consultarFechaActual());

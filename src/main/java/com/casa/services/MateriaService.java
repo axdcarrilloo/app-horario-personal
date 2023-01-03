@@ -27,14 +27,10 @@ public class MateriaService {
 	
 	private Boolean validarCamposModificar(MateriamodificarDto materia) {
 		log.info("MateriaService.class - validarCamposModificar() -> Validando campos vacios...!");
-		Boolean validate = false;
 		if(materia.getId() == null) {
-			validate = true;
+			return true;
 		}
-		if(materia.getNombre() == null) {
-			validate = true;
-		}
-		return validate;
+		return materia.getNombre() == null;
 	}
 	
 	private Boolean validarCamposRegistrar(MateriaRegistroDto materia) {

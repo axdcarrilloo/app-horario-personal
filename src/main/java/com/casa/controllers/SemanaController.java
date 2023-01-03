@@ -1,5 +1,7 @@
 package com.casa.controllers;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,8 +33,17 @@ public class SemanaController {
 	
 	@PostMapping(value = Route.REGISTRAR)
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody SemanaRegistrarDto semana) {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO,
-				semanaSvc.registrar(semana)), HttpStatus.CREATED);
+		Map<String, Object> map = semanaSvc.registrar(semana);
+		String errorCamposVacios = (String)map.get("errorCamposVacios");
+		String errorMesVacio = (String)map.get("errorMesVacio");
+		if(errorCamposVacios != null) {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+		} 
+		if(errorMesVacio != null) {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorMesVacio), HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, semanaSvc.registrar(semana)), HttpStatus.CREATED);
+		}
 	}
 
 }

@@ -34,8 +34,12 @@ public class MesController {
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody MesRegistrarDto mes) {
 		Map<String, Object> map = mesSvc.registrar(mes);
 		String errorCamposVacios = (String)map.get("errorCamposVacios");
+		String errorAnnoVacio = (String)map.get("errorAnnoVacio");
 		if(errorCamposVacios != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+		} 
+		if(errorAnnoVacio != null) {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorAnnoVacio), HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.CREATED);
 		}
