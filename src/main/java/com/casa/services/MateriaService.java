@@ -38,8 +38,14 @@ public class MateriaService {
 		return materia.getNombre() == null;
 	}
 	
+	public MateriaEntity consultarPorNombre(String nombre) {
+		log.info("MateriaService.class - consultarPorNombre() -> Consultado por Nombre una Materia...!");
+		Optional<MateriaEntity> optional = materiaRepository.findByNombre(nombre);
+		return optional.orElse(null);
+	}
+	
 	public MateriaEntity consultarPorId(Long id) {
-		log.info("MateriaService.class - consultarPorId() -> Consultado por Id una materia...!");
+		log.info("MateriaService.class - consultarPorId() -> Consultado por Id una Materia...!");
 		Optional<MateriaEntity> optional = materiaRepository.findById(id);
 		return optional.orElse(null);
 	}

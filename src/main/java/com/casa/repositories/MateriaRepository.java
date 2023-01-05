@@ -1,6 +1,7 @@
 package com.casa.repositories;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -15,6 +16,8 @@ import com.casa.utils.ConstantesSQL;
 
 @Repository
 public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
+	
+	Optional<MateriaEntity> findByNombre(String nombre);
 	
 	@Modifying
     @Transactional
