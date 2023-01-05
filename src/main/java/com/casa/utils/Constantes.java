@@ -11,9 +11,14 @@ public class Constantes {
 	public static final String TTL_MODIFICACION_EXITOSA = "Modificacion Exitosa";
 	public static final String TTL_MODIFICACION_FALLIDA = "Modificacion Fallida";
 	public static final String TTL_CONSULTA_EXITOSA = "Consulta Exitosa";
+	public static final String TTL_CONSULTA_FALIDA = "Consulta Fallida";
 	
 	public static final String MSG_CAMPOS_VACIOS = "Campos vacios, favor validar";
 	public static final String MSG_NO_EXISTENTE = "No se encuentra";
+	
+	public static final String MAP_RESPUESTA = "respuesta";
+	public static final String MAP_NOEXISTENTE = "errorNoExistente";
+	public static final String MAP_CAMPOSVACIOS = "errorCamposVacios";
 	
 	public static LocalDateTime consultarFechaActual() {
 		return LocalDateTime.now();

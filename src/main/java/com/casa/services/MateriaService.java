@@ -38,10 +38,16 @@ public class MateriaService {
 		return materia.getNombre() == null;
 	}
 	
-	public MateriaEntity consultarPorNombre(String nombre) {
+	public Map<String, Object> consultarPorNombre(String nombre) {
 		log.info("MateriaService.class - consultarPorNombre() -> Consultado por Nombre una Materia...!");
+		Map<String, Object> map = new HashMap<>();
 		Optional<MateriaEntity> optional = materiaRepository.findByNombre(nombre);
-		return optional.orElse(null);
+		if(optional.isPresent()) {
+			map.put(Constantes.MAP_RESPUESTA, optional.get());
+		} else {
+			map.put(Constantes.MAP_NOEXISTENTE, Constantes.MSG_NO_EXISTENTE);
+		}
+		return map;
 	}
 	
 	public MateriaEntity consultarPorId(Long id) {
@@ -54,14 +60,15 @@ public class MateriaService {
 		log.info("MateriaService.class - modificar() -> Modificando materia...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposModificar(materia))) {
-			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
 			return map;
 		} 
 		if(consultarPorId(materia.getId()) == null) {
-			map.put("errorNoExistente", Constantes.MSG_NO_EXISTENTE);
+			map.put(Constantes.MAP_NOEXISTENTE, Constantes.MSG_NO_EXISTENTE);
 			return map;
 		} else {
-			map.put("respuesta", materiaRepository.modificar(materia.getId(), materia.getNombre(), Constantes.consultarFechaActual()));
+			map.put(Constantes.MAP_RESPUESTA, 
+					materiaRepository.modificar(materia.getId(), materia.getNombre(), Constantes.consultarFechaActual()));
 			return map;
 		}	
 	}
@@ -75,11 +82,11 @@ public class MateriaService {
 		log.info("MateriaService.class - registrar() -> Registrando materia...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(materia))) {
-			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
 		} else {
 			materia.setFechaRegistro(Constantes.consultarFechaActual());
 			materia.setFechaModificacion(Constantes.consultarFechaActual());
-			map.put("respuesta", materiaRepository.save(MateriaMapper.convertirDtoAEntity(materia)).getId());
+			map.put(Constantes.MAP_RESPUESTA, materiaRepository.save(MateriaMapper.convertirDtoAEntity(materia)).getId());
 		}		
 		return map;
 	}

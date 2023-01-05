@@ -30,22 +30,27 @@ public class MateriaController {
 	
 	@GetMapping(value = Route.CONSULTARPOR_NOMBRE)
 	public ResponseEntity<RespuestaPrincipalDto> consultarPorNombre(@PathVariable String nombre) {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA, 
-				materiaSvc.consultarPorNombre(nombre)), HttpStatus.OK);
+		Map<String, Object> map = materiaSvc.consultarPorNombre(nombre);
+		String errorNoExistente = (String)map.get(Constantes.MAP_NOEXISTENTE);
+		if(errorNoExistente != null) {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_FALIDA, errorNoExistente), HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
+		}
 	}
 	
 	@PutMapping(value = Route.MODIFICAR)
-	public ResponseEntity<RespuestaPrincipalDto> modiicar(@RequestBody MateriamodificarDto materia) {
+	public ResponseEntity<RespuestaPrincipalDto> modificar(@RequestBody MateriamodificarDto materia) {
 		Map<String, Object> map = materiaSvc.modificar(materia);
-		String errorCamposVacios = (String)map.get("errorCamposVacios");
-		String errorNoExistente = (String)map.get("errorNoExistente");
+		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
+		String errorNoExistente = (String)map.get(Constantes.MAP_NOEXISTENTE);
 		if(errorCamposVacios != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} 
 		if(errorNoExistente != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorNoExistente), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.OK);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
 		}
 	}
 	
@@ -58,11 +63,11 @@ public class MateriaController {
 	@PostMapping(value = Route.REGISTRAR)
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody MateriaRegistroDto materia) {
 		Map<String, Object> map = materiaSvc.registrar(materia);
-		String errorCamposVacios = (String)map.get("errorCamposVacios");
+		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
 		if(errorCamposVacios != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.CREATED);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
 		}
 	}
 		
