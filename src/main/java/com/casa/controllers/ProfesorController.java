@@ -38,7 +38,7 @@ public class ProfesorController {
 		if(errorNoExistente != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorNoExistente), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.RESPUESTA)), HttpStatus.OK);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
 		}
 	}
 	
@@ -59,7 +59,7 @@ public class ProfesorController {
 		if(errorSiExiste != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorSiExiste), HttpStatus.BAD_REQUEST);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.RESPUESTA)), HttpStatus.CREATED);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
 		}
 	}
 

@@ -6,7 +6,6 @@ public class Constantes {
 	
 	private Constantes() {}
 	
-	public static final String RESPUESTA = "respuesta";
 	public static final String ERROR_SIEXISTE = "errorSiExiste";
 	public static final String ERROR_CAMPOS_VACIOS = "errorCamposVacios";
 	
