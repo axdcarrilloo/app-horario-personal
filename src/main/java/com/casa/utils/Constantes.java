@@ -6,6 +6,10 @@ public class Constantes {
 	
 	private Constantes() {}
 	
+	public static final String RESPUESTA = "respuesta";
+	public static final String ERROR_SIEXISTE = "errorSiExiste";
+	public static final String ERROR_CAMPOS_VACIOS = "errorCamposVacios";
+	
 	public static final String TTL_REGISTRO_EXITOSO = "Registro Exitoso";
 	public static final String TTL_REGISTRO_FALLIDO = "Registro Fallido";
 	public static final String TTL_MODIFICACION_EXITOSA = "Modificacion Exitosa";
@@ -15,6 +19,7 @@ public class Constantes {
 	
 	public static final String MSG_CAMPOS_VACIOS = "Campos vacios, favor validar";
 	public static final String MSG_NO_EXISTENTE = "No se encuentra";
+	public static final String MSG_SI_EXISTENTE = "Ya se encuentra registrado";
 	
 	public static final String MAP_RESPUESTA = "respuesta";
 	public static final String MAP_NOEXISTENTE = "errorNoExistente";

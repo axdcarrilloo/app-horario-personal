@@ -91,6 +91,16 @@ public class ProfesorService {
 		}	
 	}
 	
+	public Boolean existenciaPorCedula(String cedula) {
+		return consultarPorCedula(cedula) != null;
+	}
+	
+	public ProfesorEntity consultarPorCedula(String cedula) {
+		log.info("ProfesorService.class - consultarPorCedula() -> Consultando por Cedula un Profesor...!");
+		Optional<ProfesorEntity> optional = profesorRepository.findByCedula(cedula);
+		return optional.orElse(null);
+	} 
+	
 	public ProfesorEntity consultarPorId(Long id) {
 		log.info("ProfesorService.class - consultarPorId() -> Consultando por Id un profesor...!");
 		Optional<ProfesorEntity> optional = profesorRepository.findById(id);
@@ -106,13 +116,18 @@ public class ProfesorService {
 		log.info("ProfesorService.class - registrar() -> Registrando profesor...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistro(profesor))) {
-			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.ERROR_CAMPOS_VACIOS, Constantes.MSG_CAMPOS_VACIOS);
+			return map;
+		}
+		if(Boolean.TRUE.equals(existenciaPorCedula(profesor.getCedula()))) {
+			map.put(Constantes.ERROR_SIEXISTE, Constantes.MSG_SI_EXISTENTE);
+			return map;
 		} else {
 			profesor.setFechaRegistro(Constantes.consultarFechaActual());
 			profesor.setFechaModificacion(Constantes.consultarFechaActual());
 			map.put("respuesta", profesorRepository.save(ProfesorMapper.convertirDtoAEntity(profesor)).getId());
-		}		
-		return map;
+			return map;
+		}
 	}
 
 }
