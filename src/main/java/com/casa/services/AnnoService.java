@@ -35,6 +35,7 @@ public class AnnoService {
 	
 	public Long registrar(AnnoRegistrarDto anno) {
 		log.info("AnnoService.class - registrar() -> Registrando Año...!");
+		anno.setNombre(anno.getAnno().toString());
 		anno.setFechaModificacion(Constantes.consultarFechaActual());
 		anno.setFechaRegistro(Constantes.consultarFechaActual());
 		return annoRepository.save(AnnoMapper.convertirDtoAEntity(anno)).getId();

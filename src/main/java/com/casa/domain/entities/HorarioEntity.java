@@ -39,7 +39,7 @@ public class HorarioEntity {
 	
 	@ManyToOne
     @JoinColumn(name = "id_profesor", nullable = false, referencedColumnName = "id")
-	private MateriaEntity profesor;
+	private ProfesorEntity profesor;
 	
 	@Column(nullable = false, name = "fecha_registro")
 	private LocalDateTime fechaRegistro;

@@ -11,6 +11,7 @@ public class Route {
 	public static final String MES = "/Mes";
 	public static final String SEMANA = "/Semana";
 	public static final String CURSO = "/Curso";
+	public static final String HORARIO = "/Horario";
 	
 	public static final String CONSULTAR_TOS = "/ConsultarTodos";
 	public static final String CONSULTAR_TAS = "/ConsultarTodas";
