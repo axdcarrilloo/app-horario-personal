@@ -26,13 +26,13 @@ public class DiaController {
 	
 	@Autowired
 	private DiaService diaSvc;
-	
+
 	@PutMapping(value = Route.MODIFICAR)
 	public ResponseEntity<RespuestaPrincipalDto> modificar(@RequestBody DiaModificarDto dia) {
 		Map<String, Object> map = diaSvc.modificar(dia);
-		String errorCamposVacios = (String)map.get("errorCamposVacios");
+		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
 		String errorSemanaVacia = (String)map.get("errorSemanaVacia");
-		String errorNoExistente = (String)map.get("errorNoExistente");
+		String errorNoExistente = (String)map.get(Constantes.MAP_NOEXISTENTE);
 		if(errorCamposVacios != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} 
@@ -42,7 +42,7 @@ public class DiaController {
 		if(errorNoExistente != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_MODIFICACION_FALLIDA, errorNoExistente), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_MODIFICACION_EXITOSA, map.get("respuesta")), HttpStatus.OK);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_MODIFICACION_EXITOSA, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
 		}
 	}
 	
@@ -55,7 +55,7 @@ public class DiaController {
 	@PostMapping(value = Route.REGISTRAR)
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody DiaRegistroDto dia) {
 		Map<String, Object> map = diaSvc.registrar(dia);
-		String errorCamposVacios = (String)map.get("errorCamposVacios");
+		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
 		String errorSemanaVacia = (String)map.get("errorSemanaVacia");
 		if(errorCamposVacios != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
@@ -63,7 +63,7 @@ public class DiaController {
 		if(errorSemanaVacia != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorSemanaVacia), HttpStatus.BAD_REQUEST);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.CREATED);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
 		}
 	}
 

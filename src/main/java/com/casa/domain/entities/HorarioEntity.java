@@ -40,6 +40,9 @@ public class HorarioEntity {
 	@ManyToOne
     @JoinColumn(name = "id_profesor", nullable = false, referencedColumnName = "id")
 	private ProfesorEntity profesor;
+
+	@Column(nullable = false, name = "horas_dictar")
+	private Integer horasDictar;
 	
 	@Column(nullable = false, name = "fecha_registro")
 	private LocalDateTime fechaRegistro;

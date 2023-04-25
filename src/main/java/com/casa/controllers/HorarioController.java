@@ -1,5 +1,6 @@
 package com.casa.controllers;
 
+import com.casa.domain.dtos.HorarioRegistroDto;
 import com.casa.domain.dtos.RespuestaPrincipalDto;
 import com.casa.services.HorarioService;
 import com.casa.utils.Constantes;
@@ -8,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = Route.HORARIO, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -18,6 +19,40 @@ public class HorarioController {
 
     @Autowired
     private HorarioService horarioSvc;
+
+    @DeleteMapping(Route.ELIMINAR_PORID)
+    public ResponseEntity<RespuestaPrincipalDto> eliminar(@PathVariable Long id) {
+        Map<String, Object> map = horarioSvc.eliminar(id);
+        Object errorNoExistente = map.get(Constantes.MAP_NOEXISTENTE);
+        if(errorNoExistente != null) {
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_ELIMINACION_FALLIDA, errorNoExistente), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_ELIMINACION_EXITOSA, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping(value = Route.REGISTRAR)
+    public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody HorarioRegistroDto horario) {
+        Map<String, Object> map = horarioSvc.registrar(horario);
+        String errorCamposVacios = (String)map.get("errorCamposVacios");
+        String errorDiaVacio = (String)map.get("errorDiaVacio");
+        String errorMateriaVacia = (String)map.get("errorMateriaVacia");
+        String errorProfesorVacio = (String)map.get("errorProfesorVacio");
+        if(errorCamposVacios != null) {
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+        }
+        if(errorDiaVacio != null) {
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorDiaVacio), HttpStatus.BAD_REQUEST);
+        }
+        if(errorMateriaVacia != null) {
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorMateriaVacia), HttpStatus.BAD_REQUEST);
+        }
+        if(errorProfesorVacio != null) {
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorProfesorVacio), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
+        }
+    }
 
     @GetMapping(value = Route.CONSULTAR_TOS)
     public ResponseEntity<RespuestaPrincipalDto> consultarTodos() {

@@ -59,11 +59,11 @@ public class CursoService {
 		log.info("CursoService.class - registrar() -> Registrando Curso...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(curso))) {
-			map.put(Constantes.ERROR_CAMPOS_VACIOS, Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
 			return map;
 		} 
 		if(Boolean.TRUE.equals(existenciaPorNombre(curso.getNombre()))) {
-			map.put(Constantes.ERROR_SIEXISTE, Constantes.MSG_SI_EXISTENTE);
+			map.put(Constantes.MAP_SIEXISTENTE, Constantes.MSG_SI_EXISTENTE);
 			return map;
 		} else {
 			curso.setFechaModificacion(Constantes.consultarFechaActual());

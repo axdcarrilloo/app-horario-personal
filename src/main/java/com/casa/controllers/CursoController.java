@@ -46,8 +46,8 @@ public class CursoController {
 	@PostMapping(value = Route.REGISTRAR)
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody CursoRegistroDto curso) {
 		Map<String, Object> map = cursoSvc.registrar(curso);
-		String errorCamposVacios = (String)map.get(Constantes.ERROR_CAMPOS_VACIOS);
-		String errorSiExiste = (String)map.get(Constantes.ERROR_SIEXISTE);
+		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
+		String errorSiExiste = (String)map.get(Constantes.MAP_SIEXISTENTE);
 		if(errorCamposVacios != null) {
 			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		}

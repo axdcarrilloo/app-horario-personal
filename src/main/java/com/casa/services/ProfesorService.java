@@ -116,11 +116,11 @@ public class ProfesorService {
 		log.info("ProfesorService.class - registrar() -> Registrando profesor...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistro(profesor))) {
-			map.put(Constantes.ERROR_CAMPOS_VACIOS, Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
 			return map;
 		}
 		if(Boolean.TRUE.equals(existenciaPorCedula(profesor.getCedula()))) {
-			map.put(Constantes.ERROR_SIEXISTE, Constantes.MSG_SI_EXISTENTE);
+			map.put(Constantes.MAP_SIEXISTENTE, Constantes.MSG_SI_EXISTENTE);
 			return map;
 		} else {
 			profesor.setFechaRegistro(Constantes.consultarFechaActual());

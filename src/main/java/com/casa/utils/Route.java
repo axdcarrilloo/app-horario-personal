@@ -18,5 +18,7 @@ public class Route {
 	public static final String REGISTRAR = "/Registrar";
 	public static final String MODIFICAR = "/Modificar";
 	public static final String CONSULTARPOR_NOMBRE = "/ConsultarPorNombre/{nombre}";
+	public static final String ELIMINAR_PORID = "/Eliminar/{id}";
 
 }
+

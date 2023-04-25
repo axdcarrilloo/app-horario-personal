@@ -22,6 +22,8 @@ public class HorarioRegistroDto {
 
     private ProfesorEntity profesor;
 
+    private Integer horasDictar;
+
     private LocalDateTime fechaRegistro;
 
     private LocalDateTime fechaModificacion;
