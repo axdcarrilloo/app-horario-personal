@@ -20,6 +20,8 @@ public class DiaRegistroDto {
 	private String nombre;
 	
 	private Integer horas;
+
+	private Integer horasAcumuladas;
 	
 	private LocalDateTime fechaRegistro;
 	

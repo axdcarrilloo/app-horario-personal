@@ -89,6 +89,7 @@ public class DiaService {
 			return map;
 		} else {
 			dia.setHoras(7);
+			dia.setHorasAcumuladas(0);
 			dia.setFechaModificacion(Constantes.consultarFechaActual());
 			dia.setFechaRegistro(Constantes.consultarFechaActual());
 			map.put("respuesta", diaRepository.save(DiaMapper.convertirDtoAEntity(dia)).getId());

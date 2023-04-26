@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.casa.domain.dtos.MateriaRegistroDto;
-import com.casa.domain.dtos.MateriamodificarDto;
+import com.casa.domain.dtos.MateriaModificarDto;
 import com.casa.domain.entities.MateriaEntity;
 import com.casa.domain.mappers.MateriaMapper;
 import com.casa.repositories.MateriaRepository;
@@ -25,7 +25,7 @@ public class MateriaService {
 	@Autowired
 	private MateriaRepository materiaRepository;
 	
-	private Boolean validarCamposModificar(MateriamodificarDto materia) {
+	private Boolean validarCamposModificar(MateriaModificarDto materia) {
 		log.info("MateriaService.class - validarCamposModificar() -> Validando campos vacios...!");
 		if(materia.getId() == null) {
 			return true;
@@ -56,7 +56,7 @@ public class MateriaService {
 		return optional.orElse(null);
 	}
 	
-	public Map<String, Object> modificar(MateriamodificarDto materia) {
+	public Map<String, Object> modificar(MateriaModificarDto materia) {
 		log.info("MateriaService.class - modificar() -> Modificando materia...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposModificar(materia))) {

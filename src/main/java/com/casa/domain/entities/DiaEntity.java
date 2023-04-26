@@ -38,6 +38,9 @@ public class DiaEntity {
 	
 	@Column(nullable = false, length = 1)
 	private Integer horas;
+
+	@Column(nullable = false, length = 1)
+	private Integer horasAcumuladas;
 	
 	@Column(nullable = false, name = "fecha_registro")
 	private LocalDateTime fechaRegistro;

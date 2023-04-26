@@ -41,7 +41,7 @@ public class HorarioEntity {
     @JoinColumn(name = "id_profesor", nullable = false, referencedColumnName = "id")
 	private ProfesorEntity profesor;
 
-	@Column(nullable = false, name = "horas_dictar")
+	@Column(nullable = false, name = "horas_dictar", length = 1)
 	private Integer horasDictar;
 	
 	@Column(nullable = false, name = "fecha_registro")

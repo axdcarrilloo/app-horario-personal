@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.casa.domain.dtos.MateriaRegistroDto;
-import com.casa.domain.dtos.MateriamodificarDto;
+import com.casa.domain.dtos.MateriaModificarDto;
 import com.casa.domain.dtos.RespuestaPrincipalDto;
 import com.casa.services.MateriaService;
 import com.casa.utils.Constantes;
@@ -40,7 +40,7 @@ public class MateriaController {
 	}
 	
 	@PutMapping(value = Route.MODIFICAR)
-	public ResponseEntity<RespuestaPrincipalDto> modificar(@RequestBody MateriamodificarDto materia) {
+	public ResponseEntity<RespuestaPrincipalDto> modificar(@RequestBody MateriaModificarDto materia) {
 		Map<String, Object> map = materiaSvc.modificar(materia);
 		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
 		String errorNoExistente = (String)map.get(Constantes.MAP_NOEXISTENTE);

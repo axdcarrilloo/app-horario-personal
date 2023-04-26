@@ -1,9 +1,9 @@
 package com.casa.services;
 
+import com.casa.domain.dtos.HorarioMostrarSimple;
 import com.casa.domain.dtos.HorarioRegistroDto;
+import com.casa.domain.entities.DiaEntity;
 import com.casa.domain.entities.HorarioEntity;
-import com.casa.domain.entities.ProfesorEntity;
-import com.casa.domain.mappers.DiaMapper;
 import com.casa.domain.mappers.HorarioMapper;
 import com.casa.repositories.HorarioRepository;
 import com.casa.utils.Constantes;
@@ -42,10 +42,33 @@ public class HorarioService {
         if(horario.getMateria() == null || horario.getMateria().getId() == null) {
             return true;
         }
-        if(horario.getDia() == null || horario.getDia().getId() == null) {
+        return horario.getProfesor() == null || horario.getProfesor().getId() == null;
+    }
+
+    private Boolean validarHorasPorDias(Integer horasDia, Integer horas) {
+        return horasDia < horas;
+    }
+
+    private Boolean validarHorasAcumuladas(Integer horasAcumuladas, Integer horasDia) {
+        return horasAcumuladas > horasDia;
+    }
+
+    private Boolean validarHorasIngresar(Integer horasIngresar) {
+        if(horasIngresar < 1) {
             return true;
         }
-        return horario.getProfesor() == null || horario.getProfesor().getId() == null;
+        return horasIngresar >= 3;
+    }
+
+    public Map<String, Object> consultarPorIdDia(Long id) {
+        Map<String, Object> map = new HashMap<>();
+        List<HorarioMostrarSimple> listHorarioEntity = HorarioMapper.convertirListEntityToMostrarSimple(horarioRepository.findByIdDia(id));
+        if(!listHorarioEntity.isEmpty()) {
+            map.put(Constantes.MAP_RESPUESTA, listHorarioEntity);
+        } else {
+            map.put(Constantes.MAP_NOEXISTENTE, Constantes.MSG_NO_EXISTENTE);
+        }
+        return map;
     }
 
     public HorarioEntity consultarPorId(Long id) {
@@ -79,10 +102,29 @@ public class HorarioService {
             map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
             return map;
         }
-        if(diaSvc.consultarPorId(horario.getDia().getId()) == null) {
+
+        DiaEntity dia = diaSvc.consultarPorId( horario.getDia().getId() );
+        if(dia == null) {
             map.put("errorDiaVacio", Constantes.MSG_NO_EXISTENTE);
             return map;
         }
+        if(validarHorasPorDias(dia.getHoras(), horario.getHorasDictar())) {
+            map.put("errorHorasDias", "No se le puede agregar esta (" +horario.getHorasDictar()+ ") cantidad de horas a este dia_1");
+            return map;
+        }
+        if(validarHorasIngresar(horario.getHorasDictar())) {
+            map.put("errorHorasIngresar", "No se puede ingresar esta (" +horario.getHorasDictar()+ ") cantidad de horas a este dia_3");
+            return map;
+        }
+        Integer horasAcumuladas = dia.getHorasAcumuladas() + horario.getHorasDictar();
+        if(validarHorasAcumuladas(horasAcumuladas, dia.getHoras())) {
+            map.put("errorHorasAcumuladas", "No se le puede agregar esta (" +horario.getHorasDictar()+ ") cantidad de horas a este dia_2");
+            return map;
+        } else {
+            dia.setHorasAcumuladas(dia.getHorasAcumuladas() + horario.getHorasDictar());
+            horario.setDia(dia);
+        }
+
         if(materiaSvc.consultarPorId(horario.getMateria().getId()) == null) {
             map.put("errorMateriaVacia", Constantes.MSG_NO_EXISTENTE);
             return map;
