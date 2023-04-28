@@ -41,6 +41,9 @@ public class HorarioEntity {
     @JoinColumn(name = "id_profesor", nullable = false, referencedColumnName = "id")
 	private ProfesorEntity profesor;
 
+	@Column(nullable = false, name = "id_curso")
+	private Long idCurso;
+
 	@Column(nullable = false, name = "horas_dictar", length = 1)
 	private Integer horasDictar;
 	

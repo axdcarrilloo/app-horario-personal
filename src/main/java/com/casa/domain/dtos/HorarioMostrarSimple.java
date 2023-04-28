@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class HorarioMostrarSimple {
 
-    private String diaNombre;
-    private String materiaNombre;
+    private String nombreDia;
+    private String nombreMateria;
     private Integer horasDictar;
 
 }

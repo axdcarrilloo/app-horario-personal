@@ -22,6 +22,8 @@ public class HorarioRegistroDto {
 
     private ProfesorEntity profesor;
 
+    private Long idCurso;
+
     private Integer horasDictar;
 
     private LocalDateTime fechaRegistro;
