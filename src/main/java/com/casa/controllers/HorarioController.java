@@ -55,7 +55,6 @@ public class HorarioController {
         if(errorCamposVacios != null) {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
         }
-
         if(errorDiaVacio != null) {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorDiaVacio), HttpStatus.NOT_FOUND);
         }
