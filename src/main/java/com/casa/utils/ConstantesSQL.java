@@ -15,4 +15,7 @@ public class ConstantesSQL {
 
 	public static final String CONSULTARPOR_IDDIA = "SELECT * FROM `horarios` WHERE id_dia = :idDia";
 
+	public static final String AGREGAR_CANTIDAD_HORAS = "UPDATE `horas_dia_curso` SET `cantidad_horas` = :cantidadHoras, " +
+			"`fecha_modificacion` = :fechaModificacion WHERE `horas_dia_curso`.`id` = :id";
+
 }

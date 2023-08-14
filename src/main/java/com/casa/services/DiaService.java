@@ -46,6 +46,10 @@ public class DiaService {
 		}
 		return dia.getNombre() == null;
 	}
+
+	public Boolean validarExistenciaPorId(Long id) {
+		return consultarPorId(id) != null;
+	}
 	
 	public DiaEntity consultarPorId(Long id) {
 		log.info("DiaService.class - consultarPorId() -> Consultado por Id un dia");
