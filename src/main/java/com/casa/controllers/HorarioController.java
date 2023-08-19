@@ -49,7 +49,6 @@ public class HorarioController {
         String errorDiaVacio = (String)map.get("errorDiaVacio");
         String errorHorasDias = (String)map.get("errorHorasDias");
         String errorHorasIngresar = (String)map.get("errorHorasIngresar");
-        String errorHorasAcumuladas = (String)map.get("errorHorasAcumuladas");
         String errorMateriaVacia = (String)map.get("errorMateriaVacia");
         String errorProfesorVacio = (String)map.get("errorProfesorVacio");
         if(errorCamposVacios != null) {
@@ -64,10 +63,6 @@ public class HorarioController {
         if(errorHorasIngresar != null) {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorHorasIngresar), HttpStatus.BAD_REQUEST);
         }
-        if(errorHorasAcumuladas != null) {
-            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorHorasAcumuladas), HttpStatus.BAD_REQUEST);
-        }
-
         if(errorMateriaVacia != null) {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorMateriaVacia), HttpStatus.NOT_FOUND);
         }

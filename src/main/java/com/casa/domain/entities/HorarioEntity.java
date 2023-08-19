@@ -28,11 +28,7 @@ public class HorarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, length = 10)
 	private Long id;
-	
-	@ManyToOne
-    @JoinColumn(name = "id_dia", nullable = false, referencedColumnName = "id")
-	private DiaEntity dia;
-	
+
 	@ManyToOne
     @JoinColumn(name = "id_materia", nullable = false, referencedColumnName = "id")
 	private MateriaEntity materia;
@@ -41,12 +37,10 @@ public class HorarioEntity {
     @JoinColumn(name = "id_profesor", nullable = false, referencedColumnName = "id")
 	private ProfesorEntity profesor;
 
-	@Column(nullable = false, name = "id_curso")
-	private Long idCurso;
+	@ManyToOne
+	@JoinColumn(name = "id_horas_dia_curso", nullable = false, referencedColumnName = "id")
+	private HorasDiaCursoEntity horasDiaCurso;
 
-	@Column(nullable = false, name = "horas_dictar", length = 1)
-	private Integer horasDictar;
-	
 	@Column(nullable = false, name = "fecha_registro")
 	private LocalDateTime fechaRegistro;
 	

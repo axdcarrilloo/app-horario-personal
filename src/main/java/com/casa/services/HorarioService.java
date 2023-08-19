@@ -49,12 +49,8 @@ public class HorarioService {
         return horario.getProfesor() == null || horario.getProfesor().getId() == null;
     }
 
-    private Boolean validarHorasPorDias(Integer horasDia, Integer horas) {
-        return horasDia < horas;
-    }
-
-    private Boolean validarHorasAcumuladas(Integer horasAcumuladas, Integer horasDia) {
-        return horasAcumuladas > horasDia;
+    private Boolean validarHorasPorDias(DiaEntity dia) {
+        return dia.getHoras() <= horasDiaCursoSvc.sumaHorasDia(dia.getId());
     }
 
     private Boolean validarHorasIngresar(Integer horasIngresar) {
@@ -92,11 +88,10 @@ public class HorarioService {
         if(Boolean.TRUE.equals(existenciaPorId(id))) {
             horarioRepository.deleteById(id);
             map.put(Constantes.MAP_RESPUESTA, id);
-            return map;
         } else {
             map.put(Constantes.MAP_NOEXISTENTE, Constantes.MSG_NO_EXISTENTE);
-            return map;
         }
+        return map;
     }
 
     public Map<String, Object> registrar(HorarioRegistroDto horario) {
@@ -106,36 +101,25 @@ public class HorarioService {
             map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
             return map;
         }
-
         DiaEntity dia = diaSvc.consultarPorId( horario.getDia().getId() );
         if(dia == null) {
             map.put("errorDiaVacio", Constantes.MSG_NO_EXISTENTE);
             return map;
         }
-        if(validarHorasPorDias(dia.getHoras(), horario.getHorasDictar())) {
-            map.put("errorHorasDias", "No se le puede agregar esta (" +horario.getHorasDictar()+ ") cantidad de horas a este dia_1");
+        if(validarHorasPorDias(dia)) {
+            map.put("errorHorasDias", "No se le puede agregar esta (" +horario.getHorasDictar()+ ") cantidad de horas a este dia");
             return map;
         }
         if(validarHorasIngresar(horario.getHorasDictar())) {
-            map.put("errorHorasIngresar", "No se puede ingresar esta (" +horario.getHorasDictar()+ ") cantidad de horas a este dia_3");
+            map.put("errorHorasIngresar", "No se puede ingresar mas de 2 horas en el horario");
             return map;
         }
-        /*Integer horasAcumuladas = dia.getHorasAcumuladas() + horario.getHorasDictar();
-        if(validarHorasAcumuladas(horasAcumuladas, dia.getHoras())) {
-            map.put("errorHorasAcumuladas", "No se le puede agregar esta (" +horario.getHorasDictar()+ ") cantidad de horas a este dia_2");
-            return map;
-        } else {
-            dia.setHorasAcumuladas(dia.getHorasAcumuladas() + horario.getHorasDictar());
-            horario.setDia(dia);
-        }*/
-
         if(materiaSvc.consultarPorId(horario.getMateria().getId()) == null) {
             map.put("errorMateriaVacia", Constantes.MSG_NO_EXISTENTE);
             return map;
         }
         if(profesorSvc.consultarPorId(horario.getProfesor().getId()) == null) {
             map.put("errorProfesorVacio", Constantes.MSG_NO_EXISTENTE);
-            return map;
         } else {
             horario.setFechaModificacion(Constantes.consultarFechaActual());
             horario.setFechaRegistro(Constantes.consultarFechaActual());
@@ -143,8 +127,8 @@ public class HorarioService {
 
             horasDiaCursoSvc.registrar(new HorasDiaCursoEntity(null, dia, horario.getIdCurso(), horario.getHorasDictar(),
                     Constantes.consultarFechaActual(), Constantes.consultarFechaActual()));
-            return map;
         }
+        return map;
     }
 
     public List<HorarioEntity> consultarTodos() {
