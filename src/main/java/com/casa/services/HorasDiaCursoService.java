@@ -35,7 +35,7 @@ public class HorasDiaCursoService {
 
     public List<HorasDiaCursoEntity> consultarPorDia(Long idDia) {
         log.info("HorasDiaCursoService.class - consultarPorDia() -> Consultando cantidad de horas por dia...!");
-        return horasDiaCursoRepository.findByIdDia(idDia);
+        return horasDiaCursoRepository.findByDia(idDia);
     }
 
     public Map<String, Object> registrar(HorasDiaCursoEntity horasDiaCurso) {
@@ -48,13 +48,4 @@ public class HorasDiaCursoService {
         }
         return map;
     }
-
-    public Map<String, Object> agregarCantidadHoras(HorasDiaCursoEntity horasDiaCurso) {
-        log.info("HorasDiaCursoService.class - agregarCantidadHoras() -> Agregando cantidad de horas al dia...!");
-        Map<String, Object> map = new HashMap<>();
-        map.put(Constantes.MAP_RESPUESTA,
-                horasDiaCursoRepository.agregarCantidadHoras(horasDiaCurso.getId(), horasDiaCurso.getCantidadHoras(), Constantes.consultarFechaActual()));
-        return map;
-    }
-
 }
