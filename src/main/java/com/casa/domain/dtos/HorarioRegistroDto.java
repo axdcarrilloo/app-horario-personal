@@ -26,8 +26,4 @@ public class HorarioRegistroDto {
 
     private Integer horasDictar;
 
-    private LocalDateTime fechaRegistro;
-
-    private LocalDateTime fechaModificacion;
-
 }

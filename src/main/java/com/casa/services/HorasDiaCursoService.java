@@ -1,5 +1,6 @@
 package com.casa.services;
 
+import com.casa.domain.entities.DiaEntity;
 import com.casa.domain.entities.HorasDiaCursoEntity;
 import com.casa.repositories.HorasDiaCursoRepository;
 import com.casa.utils.Constantes;
@@ -23,29 +24,25 @@ public class HorasDiaCursoService {
     @Autowired
     private DiaService diaSvc;
 
-    public Integer sumaHorasDia(Long idDia) {
+    public Integer sumaHorasDia(DiaEntity dia) {
         log.info("HorasDiaCursoService.class - sumaHorasDia() -> Sumando cantidad de horas por dia...!");
         int horasSumadas = 0;
-        List<HorasDiaCursoEntity> horasCursos = consultarPorDia(idDia);
+        List<HorasDiaCursoEntity> horasCursos = consultarPorDia(dia);
         for (HorasDiaCursoEntity horasDia : horasCursos){
             horasSumadas = horasSumadas + horasDia.getCantidadHoras();
         }
         return horasSumadas;
     }
 
-    public List<HorasDiaCursoEntity> consultarPorDia(Long idDia) {
+    public List<HorasDiaCursoEntity> consultarPorDia(DiaEntity dia) {
         log.info("HorasDiaCursoService.class - consultarPorDia() -> Consultando cantidad de horas por dia...!");
-        return horasDiaCursoRepository.findByDia(idDia);
+        return horasDiaCursoRepository.findByDia(dia);
     }
 
     public Map<String, Object> registrar(HorasDiaCursoEntity horasDiaCurso) {
         log.info("HorasDiaCursoService.class - registrar() -> Registrando cantidad de horas al dia...!");
         Map<String, Object> map = new HashMap<>();
-        if(!diaSvc.validarExistenciaPorId(horasDiaCurso.getDia().getId())) {
-            map.put("errorDiaVacio", Constantes.MSG_NO_EXISTENTE);
-        }else {
-            map.put(Constantes.MAP_RESPUESTA, horasDiaCursoRepository.save(horasDiaCurso));
-        }
+        map.put(Constantes.MAP_RESPUESTA, horasDiaCursoRepository.save(horasDiaCurso));
         return map;
     }
 }

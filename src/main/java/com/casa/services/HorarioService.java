@@ -49,8 +49,8 @@ public class HorarioService {
         return horario.getProfesor() == null || horario.getProfesor().getId() == null;
     }
 
-    private Boolean validarHorasPorDias(DiaEntity dia) {
-        return dia.getHoras() <= horasDiaCursoSvc.sumaHorasDia(dia.getId());
+    private Boolean validarHorasPorDias(DiaEntity dia, Integer horasDictar) {
+        return dia.getHoras() <= (horasDiaCursoSvc.sumaHorasDia(dia)  + horasDictar);
     }
 
     private Boolean validarHorasIngresar(Integer horasIngresar) {
@@ -58,6 +58,12 @@ public class HorarioService {
             return true;
         }
         return horasIngresar >= 3;
+    }
+
+    private HorasDiaCursoEntity obtenerIdRegistroHorasDiaCurso(DiaEntity dia, Long idCurso, Integer horasDictar) {
+        Map<String, Object> horasDiaCursoMap = horasDiaCursoSvc.registrar(new HorasDiaCursoEntity(null, dia, idCurso, horasDictar,
+                Constantes.consultarFechaActual(), Constantes.consultarFechaActual()));
+        return (HorasDiaCursoEntity)horasDiaCursoMap.get(Constantes.MAP_RESPUESTA);
     }
 
     public Map<String, Object> consultarPorIdDia(Long id) {
@@ -106,7 +112,7 @@ public class HorarioService {
             map.put("errorDiaVacio", Constantes.MSG_NO_EXISTENTE);
             return map;
         }
-        if(validarHorasPorDias(dia)) {
+        if(validarHorasPorDias(dia, horario.getHorasDictar())) {
             map.put("errorHorasDias", "No se le puede agregar esta (" +horario.getHorasDictar()+ ") cantidad de horas a este dia");
             return map;
         }
@@ -114,19 +120,15 @@ public class HorarioService {
             map.put("errorHorasIngresar", "No se puede ingresar mas de 2 horas en el horario");
             return map;
         }
-        if(materiaSvc.consultarPorId(horario.getMateria().getId()) == null) {
+        if(!materiaSvc.existenciaPorId(horario.getMateria().getId())) {
             map.put("errorMateriaVacia", Constantes.MSG_NO_EXISTENTE);
             return map;
         }
-        if(profesorSvc.consultarPorId(horario.getProfesor().getId()) == null) {
+        if(!profesorSvc.existenciaPorId(horario.getProfesor().getId())) {
             map.put("errorProfesorVacio", Constantes.MSG_NO_EXISTENTE);
         } else {
-            horario.setFechaModificacion(Constantes.consultarFechaActual());
-            horario.setFechaRegistro(Constantes.consultarFechaActual());
-            map.put(Constantes.MAP_RESPUESTA, horarioRepository.save(HorarioMapper.convertirDtoAEntity(horario)).getId());
-
-            horasDiaCursoSvc.registrar(new HorasDiaCursoEntity(null, dia, horario.getIdCurso(), horario.getHorasDictar(),
-                    Constantes.consultarFechaActual(), Constantes.consultarFechaActual()));
+            map.put(Constantes.MAP_RESPUESTA, horarioRepository.save(HorarioMapper.convertirDtoAEntity(horario,
+                    obtenerIdRegistroHorasDiaCurso(dia, horario.getIdCurso(), horario.getHorasDictar()))).getId());
         }
         return map;
     }

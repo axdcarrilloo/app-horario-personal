@@ -20,9 +20,8 @@ public class HorarioMapper {
         return horariosSimples;
     }
 
-    public static HorarioEntity convertirDtoAEntity(HorarioRegistroDto horario) {
-        return new HorarioEntity(0L, horario.getMateria(), horario.getProfesor(), new HorasDiaCursoEntity(0L, horario.getDia(), horario.getIdCurso(), horario.getHorasDictar(),
-                horario.getFechaRegistro(), horario.getFechaModificacion()), horario.getFechaRegistro(), horario.getFechaModificacion());
+    public static HorarioEntity convertirDtoAEntity(HorarioRegistroDto horario, HorasDiaCursoEntity horasDiaCurso) {
+        return new HorarioEntity(0L, horario.getMateria(), horario.getProfesor(), horasDiaCurso, horasDiaCurso.getFechaRegistro(), horasDiaCurso.getFechaModificacion());
     }
 
 }

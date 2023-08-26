@@ -37,6 +37,11 @@ public class MateriaService {
 		log.info("MateriaService.class - validarCamposRegistrar() -> Validando campos vacios...!");
 		return materia.getNombre() == null;
 	}
+
+	public Boolean existenciaPorId(Long id){
+		log.info("MateriaService.class - existenciaPorId() -> Consultado existencia por Id de una Materia...!");
+		return consultarPorId(id) != null;
+	}
 	
 	public Map<String, Object> consultarPorNombre(String nombre) {
 		log.info("MateriaService.class - consultarPorNombre() -> Consultado por Nombre una Materia...!");

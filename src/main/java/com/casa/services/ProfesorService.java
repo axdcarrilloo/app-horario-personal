@@ -73,6 +73,11 @@ public class ProfesorService {
 		}
 		return profesor.getEmail() == null;
 	}
+
+	public Boolean existenciaPorId(Long id) {
+		log.info("ProfesorService.class - existenciaPorId() -> Consultado existencia por Id de un Profesor...!");
+		return consultarPorId(id) != null;
+	}
 	
 	public Map<String, Object> modificar(ProfesorModificarDto profesor) {
 		log.info("ProfesorService.class - modificar() -> Modificando profesor...!");
