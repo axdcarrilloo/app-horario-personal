@@ -50,7 +50,7 @@ public class HorarioService {
     }
 
     private Boolean validarHorasPorDias(DiaEntity dia, Integer horasDictar) {
-        return dia.getHoras() <= (horasDiaCursoSvc.sumaHorasDia(dia)  + horasDictar);
+        return dia.getHoras() < (horasDiaCursoSvc.sumaHorasDia(dia)  + horasDictar);
     }
 
     private Boolean validarHorasIngresar(Integer horasIngresar) {
