@@ -20,17 +20,6 @@ public class HorarioController {
     @Autowired
     private HorarioService horarioSvc;
 
-    @GetMapping(value = Route.CONSULTARPOR_IDDIA)
-    public ResponseEntity<RespuestaPrincipalDto> consultarPorIdDia(@PathVariable Long id) {
-        Map<String, Object> map = horarioSvc.consultarPorIdDia(id);
-        String errorNoExistente = (String)map.get(Constantes.MAP_NOEXISTENTE);
-        if(errorNoExistente != null) {
-            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_FALIDA, errorNoExistente), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @DeleteMapping(Route.ELIMINAR_PORID)
     public ResponseEntity<RespuestaPrincipalDto> eliminar(@PathVariable Long id) {
         Map<String, Object> map = horarioSvc.eliminar(id);
@@ -51,6 +40,7 @@ public class HorarioController {
         String errorHorasIngresar = (String)map.get("errorHorasIngresar");
         String errorMateriaVacia = (String)map.get("errorMateriaVacia");
         String errorProfesorVacio = (String)map.get("errorProfesorVacio");
+        String errorDuplicidadHorario = (String)map.get("errorDuplicidadHorario");
         if(errorCamposVacios != null) {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
         }
@@ -68,6 +58,9 @@ public class HorarioController {
         }
         if(errorProfesorVacio != null) {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorProfesorVacio), HttpStatus.NOT_FOUND);
+        }
+        if(errorDuplicidadHorario != null){
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorDuplicidadHorario), HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
         }

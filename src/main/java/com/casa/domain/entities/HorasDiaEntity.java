@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HorasDiaCursoEntity {
+public class HorasDiaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +25,9 @@ public class HorasDiaCursoEntity {
     @JoinColumn(name = "id_dia", nullable = false, referencedColumnName = "id")
     private DiaEntity dia;
 
-    @Column(name = "id_curso", nullable = false, length = 10)
-    private Long idCurso;
+    @ManyToOne
+    @JoinColumn(name = "id_horario", nullable = false, referencedColumnName = "id")
+    private HorarioEntity horario;
 
     @Column(name = "cantidad_horas", nullable = false, length = 1)
     private Integer cantidadHoras;

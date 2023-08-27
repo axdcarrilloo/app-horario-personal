@@ -1,10 +1,9 @@
 package com.casa.services;
 
-import com.casa.domain.dtos.HorarioMostrarSimple;
 import com.casa.domain.dtos.HorarioRegistroDto;
 import com.casa.domain.entities.DiaEntity;
 import com.casa.domain.entities.HorarioEntity;
-import com.casa.domain.entities.HorasDiaCursoEntity;
+import com.casa.domain.entities.HorasDiaEntity;
 import com.casa.domain.mappers.HorarioMapper;
 import com.casa.repositories.HorarioRepository;
 import com.casa.utils.Constantes;
@@ -13,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class HorarioService {
@@ -36,7 +32,7 @@ public class HorarioService {
     private ProfesorService profesorSvc;
 
     @Autowired
-    private HorasDiaCursoService horasDiaCursoSvc;
+    private HorasDiaService horasDiaSvc;
 
     private Boolean validarCamposRegistrar(HorarioRegistroDto horario) {
         log.info("HorarioService.class - validarCamposRegistrar() -> Validando campos vacios...!");
@@ -46,11 +42,14 @@ public class HorarioService {
         if(horario.getMateria() == null || horario.getMateria().getId() == null) {
             return true;
         }
+        if(horario.getIdCurso() == null) {
+            return true;
+        }
         return horario.getProfesor() == null || horario.getProfesor().getId() == null;
     }
 
     private Boolean validarHorasPorDias(DiaEntity dia, Integer horasDictar) {
-        return dia.getHoras() < (horasDiaCursoSvc.sumaHorasDia(dia)  + horasDictar);
+        return dia.getHoras() < (horasDiaSvc.sumaHorasDia(dia)  + horasDictar);
     }
 
     private Boolean validarHorasIngresar(Integer horasIngresar) {
@@ -58,23 +57,6 @@ public class HorarioService {
             return true;
         }
         return horasIngresar >= 3;
-    }
-
-    private HorasDiaCursoEntity obtenerIdRegistroHorasDiaCurso(DiaEntity dia, Long idCurso, Integer horasDictar) {
-        Map<String, Object> horasDiaCursoMap = horasDiaCursoSvc.registrar(new HorasDiaCursoEntity(null, dia, idCurso, horasDictar,
-                Constantes.consultarFechaActual(), Constantes.consultarFechaActual()));
-        return (HorasDiaCursoEntity)horasDiaCursoMap.get(Constantes.MAP_RESPUESTA);
-    }
-
-    public Map<String, Object> consultarPorIdDia(Long id) {
-        Map<String, Object> map = new HashMap<>();
-        List<HorarioMostrarSimple> listHorarioEntity = HorarioMapper.convertirListEntityToMostrarSimple(horarioRepository.findByIdDia(id));
-        if(!listHorarioEntity.isEmpty()) {
-            map.put(Constantes.MAP_RESPUESTA, listHorarioEntity);
-        } else {
-            map.put(Constantes.MAP_NOEXISTENTE, Constantes.MSG_NO_EXISTENTE);
-        }
-        return map;
     }
 
     public HorarioEntity consultarPorId(Long id) {
@@ -101,7 +83,6 @@ public class HorarioService {
     }
 
     public Map<String, Object> registrar(HorarioRegistroDto horario) {
-        log.info("HorarioService.class - registrar() -> Registrando horario...!");
         Map<String, Object> map = new HashMap<>();
         if(Boolean.TRUE.equals(validarCamposRegistrar(horario))) {
             map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
@@ -126,9 +107,13 @@ public class HorarioService {
         }
         if(!profesorSvc.existenciaPorId(horario.getProfesor().getId())) {
             map.put("errorProfesorVacio", Constantes.MSG_NO_EXISTENTE);
+            return map;
         } else {
-            map.put(Constantes.MAP_RESPUESTA, horarioRepository.save(HorarioMapper.convertirDtoAEntity(horario,
-                    obtenerIdRegistroHorasDiaCurso(dia, horario.getIdCurso(), horario.getHorasDictar()))).getId());
+            log.info("HorarioService.class - registrar() -> Registrando horario...!");
+            HorarioEntity horarioPrincipal = horarioRepository.save(HorarioMapper.convertirDtoAEntity(horario));
+            map.put(Constantes.MAP_RESPUESTA, horarioPrincipal.getId());
+            horasDiaSvc.registrar(new HorasDiaEntity(0L, dia, horarioPrincipal, horario.getHorasDictar(),
+                    Constantes.consultarFechaActual(), Constantes.consultarFechaActual()));
         }
         return map;
     }

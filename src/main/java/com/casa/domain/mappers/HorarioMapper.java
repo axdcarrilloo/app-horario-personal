@@ -1,27 +1,16 @@
 package com.casa.domain.mappers;
 
-import com.casa.domain.dtos.HorarioMostrarSimple;
 import com.casa.domain.dtos.HorarioRegistroDto;
 import com.casa.domain.entities.HorarioEntity;
-import com.casa.domain.entities.HorasDiaCursoEntity;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.casa.utils.Constantes;
 
 public class HorarioMapper {
 
     private HorarioMapper() {}
 
-    public static List<HorarioMostrarSimple> convertirListEntityToMostrarSimple(List<HorarioEntity> horarioEntities) {
-        List<HorarioMostrarSimple> horariosSimples = new ArrayList<>();
-        for(HorarioEntity horario : horarioEntities) {
-            horariosSimples.add(new HorarioMostrarSimple(horario.getHorasDiaCurso().getDia().getNombre(), horario.getMateria().getNombre(), horario.getHorasDiaCurso().getCantidadHoras()));
-        }
-        return horariosSimples;
-    }
-
-    public static HorarioEntity convertirDtoAEntity(HorarioRegistroDto horario, HorasDiaCursoEntity horasDiaCurso) {
-        return new HorarioEntity(0L, horario.getMateria(), horario.getProfesor(), horasDiaCurso, horasDiaCurso.getFechaRegistro(), horasDiaCurso.getFechaModificacion());
+    public static HorarioEntity convertirDtoAEntity(HorarioRegistroDto horario) {
+        return new HorarioEntity(0L, horario.getMateria(), horario.getProfesor(),horario.getIdCurso(),
+                Constantes.consultarFechaActual(), Constantes.consultarFechaActual());
     }
 
 }
