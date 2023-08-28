@@ -40,7 +40,7 @@ public class HorarioController {
         String errorHorasIngresar = (String)map.get("errorHorasIngresar");
         String errorMateriaVacia = (String)map.get("errorMateriaVacia");
         String errorProfesorVacio = (String)map.get("errorProfesorVacio");
-        String errorDuplicidadHorario = (String)map.get("errorDuplicidadHorario");
+        String errorDuplicidad = (String)map.get("errorDuplicidad");
         if(errorCamposVacios != null) {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
         }
@@ -59,8 +59,8 @@ public class HorarioController {
         if(errorProfesorVacio != null) {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorProfesorVacio), HttpStatus.NOT_FOUND);
         }
-        if(errorDuplicidadHorario != null){
-            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorDuplicidadHorario), HttpStatus.BAD_REQUEST);
+        if(errorDuplicidad != null){
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorDuplicidad), HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
         }

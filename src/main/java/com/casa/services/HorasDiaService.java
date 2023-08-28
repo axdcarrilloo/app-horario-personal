@@ -1,6 +1,7 @@
 package com.casa.services;
 
 import com.casa.domain.entities.DiaEntity;
+import com.casa.domain.entities.HorarioEntity;
 import com.casa.domain.entities.HorasDiaEntity;
 import com.casa.repositories.HorasDiaRepository;
 import com.casa.utils.Constantes;
@@ -21,19 +22,9 @@ public class HorasDiaService {
     @Autowired
     private HorasDiaRepository horasDiaRepository;
 
-    public Integer sumaHorasDia(DiaEntity dia) {
-        log.info("HorasDiaService.class - sumaHorasDia() -> Sumando cantidad de horas por dia...!");
-        int horasSumadas = 0;
-        List<HorasDiaEntity> horasDia = consultarPorDia(dia);
-        for (HorasDiaEntity horaDia : horasDia){
-            horasSumadas = horasSumadas + horaDia.getCantidadHoras();
-        }
-        return horasSumadas;
-    }
-
-    public List<HorasDiaEntity> consultarPorDia(DiaEntity dia) {
-        log.info("HorasDiaService.class - consultarPorDia() -> Consultando cantidad de horas por dia...!");
-        return horasDiaRepository.findByDia(dia);
+    public List<HorasDiaEntity> consultarPorHorarioYDia(HorarioEntity horario, DiaEntity dia) {
+        log.info("HorasDiaService.class - consultarPorHorario() -> Consultando cantidad de horas por Horario y Dia...!");
+        return horasDiaRepository.findByHorarioAndDia(horario, dia);
     }
 
     public Map<String, Object> registrar(HorasDiaEntity horasDiaCurso) {

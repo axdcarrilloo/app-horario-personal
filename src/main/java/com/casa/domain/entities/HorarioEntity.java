@@ -30,12 +30,12 @@ public class HorarioEntity {
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "id_profesor", nullable = false, referencedColumnName = "id")
+	private ProfesorEntity profesor;
+
+	@ManyToOne
     @JoinColumn(name = "id_materia", nullable = false, referencedColumnName = "id")
 	private MateriaEntity materia;
-	
-	@ManyToOne
-    @JoinColumn(name = "id_profesor", nullable = false, referencedColumnName = "id")
-	private ProfesorEntity profesor;
 
 	@Column(nullable = false, name = "id_curso")
 	private Long idCurso;

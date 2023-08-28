@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface HorasDiaRepository extends JpaRepository<HorasDiaEntity, Long> {
 
+    List<HorasDiaEntity> findByHorarioAndDia(HorarioEntity horario, DiaEntity dia);
+
     List<HorasDiaEntity> findByDia(DiaEntity dia);
 
 }

@@ -74,11 +74,6 @@ public class ProfesorService {
 		return profesor.getEmail() == null;
 	}
 
-	public Boolean existenciaPorId(Long id) {
-		log.info("ProfesorService.class - existenciaPorId() -> Consultado existencia por Id de un Profesor...!");
-		return consultarPorId(id) != null;
-	}
-	
 	public Map<String, Object> modificar(ProfesorModificarDto profesor) {
 		log.info("ProfesorService.class - modificar() -> Modificando profesor...!");
 		Map<String, Object> map = new HashMap<>();
@@ -88,12 +83,11 @@ public class ProfesorService {
 		} 
 		if(consultarPorId(profesor.getId()) == null) {
 			map.put("errorNoExistente", Constantes.MSG_NO_EXISTENTE);
-			return map;
 		} else {
 			map.put("respuesta", profesorRepository.modificar(profesor.getId(), profesor.getCedula(), profesor.getNombres(), profesor.getApellidos(),
 					profesor.getEdad(), profesor.getCelular(), profesor.getDireccion(), profesor.getEmail(), Constantes.consultarFechaActual()));
-			return map;
-		}	
+		}
+		return map;
 	}
 	
 	public Boolean existenciaPorCedula(String cedula) {
@@ -126,13 +120,12 @@ public class ProfesorService {
 		}
 		if(Boolean.TRUE.equals(existenciaPorCedula(profesor.getCedula()))) {
 			map.put(Constantes.MAP_SIEXISTENTE, Constantes.MSG_SI_EXISTENTE);
-			return map;
 		} else {
 			profesor.setFechaRegistro(Constantes.consultarFechaActual());
 			profesor.setFechaModificacion(Constantes.consultarFechaActual());
 			map.put("respuesta", profesorRepository.save(ProfesorMapper.convertirDtoAEntity(profesor)).getId());
-			return map;
 		}
+		return map;
 	}
 
 }

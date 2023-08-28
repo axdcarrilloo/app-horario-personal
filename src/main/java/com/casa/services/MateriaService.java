@@ -38,11 +38,6 @@ public class MateriaService {
 		return materia.getNombre() == null;
 	}
 
-	public Boolean existenciaPorId(Long id){
-		log.info("MateriaService.class - existenciaPorId() -> Consultado existencia por Id de una Materia...!");
-		return consultarPorId(id) != null;
-	}
-	
 	public Map<String, Object> consultarPorNombre(String nombre) {
 		log.info("MateriaService.class - consultarPorNombre() -> Consultado por Nombre una Materia...!");
 		Map<String, Object> map = new HashMap<>();
@@ -70,12 +65,11 @@ public class MateriaService {
 		} 
 		if(consultarPorId(materia.getId()) == null) {
 			map.put(Constantes.MAP_NOEXISTENTE, Constantes.MSG_NO_EXISTENTE);
-			return map;
 		} else {
 			map.put(Constantes.MAP_RESPUESTA, 
 					materiaRepository.modificar(materia.getId(), materia.getNombre(), Constantes.consultarFechaActual()));
-			return map;
-		}	
+		}
+		return map;
 	}
 	
 	public List<MateriaEntity> consultarTodas() {
