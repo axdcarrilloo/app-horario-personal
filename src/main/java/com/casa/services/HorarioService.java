@@ -74,13 +74,29 @@ public class HorarioService {
         return horasIngresar >= 3;
     }
 
-    public List<HorarioMostrarSimple> consultarTodosSimplificado() {
-        List<HorarioEntity> horarios = consultarTodos();
+    private List<HorasDiaEntity> sacarHorasDiaDeHorarios(List<HorarioEntity> horarios) {
         List<HorasDiaEntity> horasDia = new ArrayList<>();
         for(HorarioEntity horario : horarios) {
             horasDia.addAll(horasDiaSvc.consultarPorHorario(horario));
         }
-        return HorarioMapper.convertirEntityADto(horasDia);
+        return horasDia;
+    }
+
+    public Boolean validarDuplicidadMateriaCurso(MateriaEntity materia, Long idCurso, DiaEntity dia, Integer horasDictar) {
+        List<HorarioEntity> horarios = horarioRepository.findByMateriaAndIdCurso(materia, idCurso);
+        List<HorasDiaEntity> horasDia = sacarHorasDiaDeHorarios(horarios);
+        int sumatoriaHoras = 0;
+        for(HorasDiaEntity horaDia : horasDia) {
+            if(Objects.equals(horaDia.getDia(), dia)) {
+                sumatoriaHoras += (horaDia.getCantidadHoras() + horasDictar);
+            }
+        }
+        return sumatoriaHoras > 2;
+    }
+
+    public List<HorarioMostrarSimple> consultarTodosSimplificado() {
+        List<HorarioEntity> horarios = consultarTodos();
+        return HorarioMapper.convertirEntityADto(sacarHorasDiaDeHorarios(horarios));
     }
 
     public Map<String, Object> consultarPorDia(Long idDia) {
@@ -170,7 +186,11 @@ public class HorarioService {
         }
         if(existenciaPorProfesorMateriaCurso(profesor, materia, horario.getIdCurso())) {
             map.put("errorDuplicidad", Constantes.MSG_SI_EXISTENTE);
-        } else {
+            return map;
+        }
+        if(validarDuplicidadMateriaCurso(materia, horario.getIdCurso(), dia, horario.getHorasDictar())){
+            map.put("errorDuplicidadMateria", "Ya este curso dara la clase de "+materia.getNombre()+" este dia "+dia.getNombre());
+        }else {
             log.info("HorarioService.class - registrar() -> Registrando horario...!");
             HorarioEntity horarioPrincipal = horarioRepository.save(HorarioMapper.convertirDtoAEntity(horario));
             map.put(Constantes.MAP_RESPUESTA, horarioPrincipal.getId());
