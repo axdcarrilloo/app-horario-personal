@@ -1,6 +1,7 @@
 package com.casa.repositories;
 
 import com.casa.domain.entities.HorarioEntity;
+import com.casa.domain.entities.HorasDiaEntity;
 import com.casa.domain.entities.MateriaEntity;
 import com.casa.domain.entities.ProfesorEntity;
 import com.casa.utils.ConstantesSQL;
@@ -18,9 +19,4 @@ public interface HorarioRepository extends JpaRepository<HorarioEntity, Long> {
     List<HorarioEntity> findByIdCurso(Long idCurso);
 
     HorarioEntity findByProfesorAndMateriaAndIdCurso(ProfesorEntity profesor, MateriaEntity materia, Long idCurso);
-
-    @Transactional
-    @Query(value = ConstantesSQL.CONSULTARPOR_IDDIA, nativeQuery = true)
-    List<HorarioEntity> findByIdDia(@Param("idDia")Long idDia);
-
 }

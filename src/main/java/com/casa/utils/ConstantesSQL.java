@@ -13,6 +13,6 @@ public class ConstantesSQL {
 	public static final String MODIFICAR_DIA = "UPDATE `dias` SET `nombre` = :nombre, "
 			+ "`fecha_modificacion` = :fechaModificacion WHERE `dias`.`id` = :id";
 
-	public static final String CONSULTARPOR_IDDIA = "SELECT * FROM `horarios` WHERE id_dia = :idDia";
+	public static final String CONSULTARPOR_IDDIA = "SELECT * FROM `horas_dia` hd WHERE hd.id_dia = :idDia";
 
 }

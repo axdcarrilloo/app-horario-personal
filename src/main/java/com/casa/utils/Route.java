@@ -20,6 +20,9 @@ public class Route {
 	public static final String CONSULTARPOR_NOMBRE = "/ConsultarPorNombre/{nombre}";
 	public static final String ELIMINAR_PORID = "/Eliminar/{id}";
 	public static final String CONSULTARPOR_IDDIA = "/ConsultarPorIdDia/{id}";
+	public static final String CONSULTARPOR_IDCURSO = "/ConsultarPorIdCurso/{id}";
+	public static final String CONSULTAR_TOS_SIMPLIFICADO = "/ConsultarTodosSimplificado";
+
 
 }
 

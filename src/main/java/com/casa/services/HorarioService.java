@@ -1,5 +1,6 @@
 package com.casa.services;
 
+import com.casa.domain.dtos.HorarioMostrarSimple;
 import com.casa.domain.dtos.HorarioRegistroDto;
 import com.casa.domain.entities.*;
 import com.casa.domain.mappers.HorarioMapper;
@@ -71,6 +72,33 @@ public class HorarioService {
             return true;
         }
         return horasIngresar >= 3;
+    }
+
+    public List<HorarioMostrarSimple> consultarTodosSimplificado() {
+        List<HorarioEntity> horarios = consultarTodos();
+        List<HorasDiaEntity> horasDia = new ArrayList<>();
+        for(HorarioEntity horario : horarios) {
+            horasDia.addAll(horasDiaSvc.consultarPorHorario(horario));
+        }
+        return HorarioMapper.convertirEntityADto(horasDia);
+    }
+
+    public Map<String, Object> consultarPorDia(Long idDia) {
+        log.info("HorarioService.class - consultarPorDia() -> Consultando por Dia...!");
+        Map<String, Object> map = new HashMap<>();
+        DiaEntity dia = diaSvc.consultarPorId(idDia);
+        if(dia != null) {
+            List<HorasDiaEntity> horasDia = horasDiaSvc.consultarPorDia(dia);
+            List<HorarioEntity> horarios = new ArrayList<>();
+            for(HorasDiaEntity horadia : horasDia) {
+                horarios.add(horadia.getHorario());
+            }
+            map.put(Constantes.MAP_RESPUESTA, horarios);
+        } else {
+            map.put("errorDiaVacio", Constantes.MSG_NO_EXISTENTE);
+        }
+
+        return map;
     }
 
     public List<HorarioEntity> consultarPorCurso(Long idCurso) {

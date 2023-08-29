@@ -20,6 +20,30 @@ public class HorarioController {
     @Autowired
     private HorarioService horarioSvc;
 
+    @GetMapping(value = Route.CONSULTAR_TOS_SIMPLIFICADO)
+    public ResponseEntity<RespuestaPrincipalDto> consultarTodosSimplificado() {
+        return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA,
+                horarioSvc.consultarTodosSimplificado()), HttpStatus.OK);
+    }
+
+    @GetMapping(value = Route.CONSULTARPOR_IDDIA)
+    public ResponseEntity<RespuestaPrincipalDto> consultarPorDia(@PathVariable Long id) {
+        Map<String, Object> map = horarioSvc.consultarPorDia(id);
+        final String errorDiaVacio = (String)map.get("errorDiaVacio");
+        if(errorDiaVacio != null) {
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorDiaVacio), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA,
+                    map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping(value = Route.CONSULTARPOR_IDCURSO)
+    public ResponseEntity<RespuestaPrincipalDto> consultarPorCurso(@PathVariable Long id) {
+        return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA,
+                horarioSvc.consultarPorCurso(id)), HttpStatus.OK);
+    }
+
     @DeleteMapping(Route.ELIMINAR_PORID)
     public ResponseEntity<RespuestaPrincipalDto> eliminar(@PathVariable Long id) {
         Map<String, Object> map = horarioSvc.eliminar(id);
