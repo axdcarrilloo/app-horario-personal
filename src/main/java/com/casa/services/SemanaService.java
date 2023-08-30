@@ -58,13 +58,13 @@ private final Logger log = LoggerFactory.getLogger(SemanaService.class);
 		}
 		if(mesSvc.consultarPorId(semana.getMes().getId()) == null) {
 			map.put("errorMesVacio", Constantes.MSG_NO_EXISTENTE);
-			return map;
+
 		} else {
 			semana.setFechaModificacion(Constantes.consultarFechaActual());
 			semana.setFechaRegistro(Constantes.consultarFechaActual());
 			map.put("respuesta", semanaRepository.save(SemanaMapper.convertirDtoAEntity(semana)).getId());
-			return map;
 		}
+		return map;
 	}
 
 }

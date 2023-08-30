@@ -47,10 +47,6 @@ public class DiaService {
 		return dia.getNombre() == null;
 	}
 
-	public Boolean validarExistenciaPorId(Long id) {
-		return consultarPorId(id) != null;
-	}
-	
 	public DiaEntity consultarPorId(Long id) {
 		log.info("DiaService.class - consultarPorId() -> Consultado por Id un dia");
 		Optional<DiaEntity> optional = diaRepository.findById(id);
@@ -66,14 +62,14 @@ public class DiaService {
 		}
 		if(semanaSvc.consultarPorId(dia.getSemana().getId()) == null) {
 			map.put("errorSemanaVacia", Constantes.MSG_NO_EXISTENTE);
+			return map;
 		}
 		if(consultarPorId(dia.getId()) == null) {
 			map.put("errorNoExistente", Constantes.MSG_NO_EXISTENTE);
-			return map;
 		} else {
 			map.put("respuesta", diaRepository.modificarDia(dia.getId(), dia.getNombre(), Constantes.consultarFechaActual()));
-			return map;
 		}
+		return map;
 	}
 	
 	public List<DiaEntity> consultarTodos() {
@@ -90,15 +86,14 @@ public class DiaService {
 		}
 		if(semanaSvc.consultarPorId(dia.getSemana().getId()) == null) {
 			map.put("errorSemanaVacia", Constantes.MSG_NO_EXISTENTE);
-			return map;
 		} else {
 			dia.setHoras(7);
 			dia.setHorasAcumuladas(0);
 			dia.setFechaModificacion(Constantes.consultarFechaActual());
 			dia.setFechaRegistro(Constantes.consultarFechaActual());
 			map.put("respuesta", diaRepository.save(DiaMapper.convertirDtoAEntity(dia)).getId());
-			return map;
 		}
+		return map;
 	}
 
 }
