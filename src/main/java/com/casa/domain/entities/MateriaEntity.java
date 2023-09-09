@@ -27,7 +27,7 @@ public class MateriaEntity {
     @Column(nullable = false, length = 10)
 	private Long id;
 	
-	@Column(nullable = false, length = 20, unique = true)
+	@Column(nullable = false, length = 50, unique = true)
 	private String nombre;
 	
 	@Column(nullable = false, name = "fecha_registro")
