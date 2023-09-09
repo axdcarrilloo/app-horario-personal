@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.casa.utils.MensajesProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,17 +58,17 @@ public class DiaService {
 		log.info("DiaService.class - modificar() -> Modificando dia");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposModificar(dia))) {
-			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.MAP_ERROR_CAMPOSVACIOS, MensajesProperties.MSG_CAMPOS_VACIOS);
 			return map;
 		}
 		if(semanaSvc.consultarPorId(dia.getSemana().getId()) == null) {
-			map.put("errorSemanaVacia", Constantes.MSG_NO_EXISTENTE);
+			map.put("errorSemanaVacia", MensajesProperties.MSG_NO_EXISTENTE);
 			return map;
 		}
 		if(consultarPorId(dia.getId()) == null) {
-			map.put("errorNoExistente", Constantes.MSG_NO_EXISTENTE);
+			map.put(Constantes.MAP_ERROR_NOEXISTENTE, MensajesProperties.MSG_NO_EXISTENTE);
 		} else {
-			map.put("respuesta", diaRepository.modificarDia(dia.getId(), dia.getNombre(), Constantes.consultarFechaActual()));
+			map.put(Constantes.MAP_RESPUESTA, diaRepository.modificarDia(dia.getId(), dia.getNombre(), Constantes.consultarFechaActual()));
 		}
 		return map;
 	}
@@ -81,17 +82,17 @@ public class DiaService {
 		log.info("DiaService.class - registrar() -> Registrando dia");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(dia))) {
-			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.MAP_ERROR_CAMPOSVACIOS, MensajesProperties.MSG_CAMPOS_VACIOS);
 			return map;
 		}
 		if(semanaSvc.consultarPorId(dia.getSemana().getId()) == null) {
-			map.put("errorSemanaVacia", Constantes.MSG_NO_EXISTENTE);
+			map.put("errorSemanaVacia", MensajesProperties.MSG_NO_EXISTENTE);
 		} else {
 			dia.setHoras(7);
 			dia.setHorasAcumuladas(0);
 			dia.setFechaModificacion(Constantes.consultarFechaActual());
 			dia.setFechaRegistro(Constantes.consultarFechaActual());
-			map.put("respuesta", diaRepository.save(DiaMapper.convertirDtoAEntity(dia)).getId());
+			map.put(Constantes.MAP_RESPUESTA, diaRepository.save(DiaMapper.convertirDtoAEntity(dia)).getId());
 		}
 		return map;
 	}

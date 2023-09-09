@@ -2,6 +2,7 @@ package com.casa.controllers;
 
 import java.util.Map;
 
+import com.casa.utils.MensajesProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.casa.domain.dtos.RespuestaPrincipalDto;
 import com.casa.domain.dtos.SemanaRegistrarDto;
 import com.casa.services.SemanaService;
-import com.casa.utils.Constantes;
 import com.casa.utils.Route;
 
 @RestController
@@ -27,7 +27,7 @@ public class SemanaController {
 	
 	@GetMapping(value = Route.CONSULTAR_TAS)
 	public ResponseEntity<RespuestaPrincipalDto> consultarTodos() {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA,
+		return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_CONSULTA_EXITOSA,
 				semanaSvc.consultarTodos()), HttpStatus.OK);
 	}
 	
@@ -37,12 +37,12 @@ public class SemanaController {
 		String errorCamposVacios = (String)map.get("errorCamposVacios");
 		String errorMesVacio = (String)map.get("errorMesVacio");
 		if(errorCamposVacios != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} 
 		if(errorMesVacio != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorMesVacio), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorMesVacio), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.CREATED);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_EXITOSO, map.get("respuesta")), HttpStatus.CREATED);
 		}
 	}
 

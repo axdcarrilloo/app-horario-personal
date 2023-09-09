@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.casa.utils.MensajesProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class MateriaService {
 		if(optional.isPresent()) {
 			map.put(Constantes.MAP_RESPUESTA, optional.get());
 		} else {
-			map.put(Constantes.MAP_NOEXISTENTE, Constantes.MSG_NO_EXISTENTE);
+			map.put(Constantes.MAP_ERROR_NOEXISTENTE, MensajesProperties.MSG_NO_EXISTENTE);
 		}
 		return map;
 	}
@@ -60,11 +61,11 @@ public class MateriaService {
 		log.info("MateriaService.class - modificar() -> Modificando materia...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposModificar(materia))) {
-			map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.MAP_ERROR_CAMPOSVACIOS, MensajesProperties.MSG_CAMPOS_VACIOS);
 			return map;
 		} 
 		if(consultarPorId(materia.getId()) == null) {
-			map.put(Constantes.MAP_NOEXISTENTE, Constantes.MSG_NO_EXISTENTE);
+			map.put(Constantes.MAP_ERROR_NOEXISTENTE, MensajesProperties.MSG_NO_EXISTENTE);
 		} else {
 			map.put(Constantes.MAP_RESPUESTA, 
 					materiaRepository.modificar(materia.getId(), materia.getNombre(), Constantes.consultarFechaActual()));
@@ -81,7 +82,7 @@ public class MateriaService {
 		log.info("MateriaService.class - registrar() -> Registrando materia...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(materia))) {
-			map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.MAP_ERROR_CAMPOSVACIOS, MensajesProperties.MSG_CAMPOS_VACIOS);
 		} else {
 			materia.setFechaRegistro(Constantes.consultarFechaActual());
 			materia.setFechaModificacion(Constantes.consultarFechaActual());

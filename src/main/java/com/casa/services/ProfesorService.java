@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.casa.utils.MensajesProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,11 +79,11 @@ public class ProfesorService {
 		log.info("ProfesorService.class - modificar() -> Modificando profesor...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposModificar(profesor))) {
-			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			map.put("errorCamposVacios", MensajesProperties.MSG_CAMPOS_VACIOS);
 			return map;
 		} 
 		if(consultarPorId(profesor.getId()) == null) {
-			map.put("errorNoExistente", Constantes.MSG_NO_EXISTENTE);
+			map.put("errorNoExistente", MensajesProperties.MSG_NO_EXISTENTE);
 		} else {
 			map.put("respuesta", profesorRepository.modificar(profesor.getId(), profesor.getCedula(), profesor.getNombres(), profesor.getApellidos(),
 					profesor.getEdad(), profesor.getCelular(), profesor.getDireccion(), profesor.getEmail(), Constantes.consultarFechaActual()));
@@ -115,11 +116,11 @@ public class ProfesorService {
 		log.info("ProfesorService.class - registrar() -> Registrando profesor...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistro(profesor))) {
-			map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
+			map.put(Constantes.MAP_ERROR_CAMPOSVACIOS, MensajesProperties.MSG_CAMPOS_VACIOS);
 			return map;
 		}
 		if(Boolean.TRUE.equals(existenciaPorCedula(profesor.getCedula()))) {
-			map.put(Constantes.MAP_SIEXISTENTE, Constantes.MSG_SI_EXISTENTE);
+			map.put(Constantes.MAP_ERROR_SIEXISTENTE, MensajesProperties.MSG_SI_EXISTENTE);
 		} else {
 			profesor.setFechaRegistro(Constantes.consultarFechaActual());
 			profesor.setFechaModificacion(Constantes.consultarFechaActual());

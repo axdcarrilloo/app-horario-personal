@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.casa.utils.MensajesProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +54,11 @@ private final Logger log = LoggerFactory.getLogger(SemanaService.class);
 		log.info("SemanaService.class - registrar() -> Registrando Semana...!");
 		Map<String, Object> map = new HashMap<>();
 		if(Boolean.TRUE.equals(validarCamposRegistrar(semana))) {
-			map.put("errorCamposVacios", Constantes.MSG_CAMPOS_VACIOS);
+			map.put("errorCamposVacios", MensajesProperties.MSG_CAMPOS_VACIOS);
 			return map;
 		}
 		if(mesSvc.consultarPorId(semana.getMes().getId()) == null) {
-			map.put("errorMesVacio", Constantes.MSG_NO_EXISTENTE);
+			map.put("errorMesVacio", MensajesProperties.MSG_NO_EXISTENTE);
 
 		} else {
 			semana.setFechaModificacion(Constantes.consultarFechaActual());

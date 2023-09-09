@@ -2,6 +2,7 @@ package com.casa.controllers;
 
 import java.util.Map;
 
+import com.casa.utils.MensajesProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,43 +32,43 @@ public class MateriaController {
 	@GetMapping(value = Route.CONSULTARPOR_NOMBRE)
 	public ResponseEntity<RespuestaPrincipalDto> consultarPorNombre(@PathVariable String nombre) {
 		Map<String, Object> map = materiaSvc.consultarPorNombre(nombre);
-		String errorNoExistente = (String)map.get(Constantes.MAP_NOEXISTENTE);
+		String errorNoExistente = (String)map.get(Constantes.MAP_ERROR_NOEXISTENTE);
 		if(errorNoExistente != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_FALIDA, errorNoExistente), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_CONSULTA_FALLIDA, errorNoExistente), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_CONSULTA_EXITOSA, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
 		}
 	}
 	
 	@PutMapping(value = Route.MODIFICAR)
 	public ResponseEntity<RespuestaPrincipalDto> modificar(@RequestBody MateriaModificarDto materia) {
 		Map<String, Object> map = materiaSvc.modificar(materia);
-		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
-		String errorNoExistente = (String)map.get(Constantes.MAP_NOEXISTENTE);
+		String errorCamposVacios = (String)map.get(Constantes.MAP_ERROR_CAMPOSVACIOS);
+		String errorNoExistente = (String)map.get(Constantes.MAP_ERROR_NOEXISTENTE);
 		if(errorCamposVacios != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} 
 		if(errorNoExistente != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorNoExistente), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorNoExistente), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
 		}
 	}
 	
 	@GetMapping(value = Route.CONSULTAR_TAS)
 	public ResponseEntity<RespuestaPrincipalDto> consultarTodas() {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA, 
+		return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_CONSULTA_EXITOSA,
 				materiaSvc.consultarTodas()), HttpStatus.OK);
 	}
 
 	@PostMapping(value = Route.REGISTRAR)
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody MateriaRegistroDto materia) {
 		Map<String, Object> map = materiaSvc.registrar(materia);
-		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
+		String errorCamposVacios = (String)map.get(Constantes.MAP_ERROR_CAMPOSVACIOS);
 		if(errorCamposVacios != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
 		}
 	}
 		

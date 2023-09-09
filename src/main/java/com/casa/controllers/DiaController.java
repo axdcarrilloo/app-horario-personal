@@ -2,6 +2,7 @@ package com.casa.controllers;
 
 import java.util.Map;
 
+import com.casa.utils.MensajesProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,40 +31,40 @@ public class DiaController {
 	@PutMapping(value = Route.MODIFICAR)
 	public ResponseEntity<RespuestaPrincipalDto> modificar(@RequestBody DiaModificarDto dia) {
 		Map<String, Object> map = diaSvc.modificar(dia);
-		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
+		String errorCamposVacios = (String)map.get(Constantes.MAP_ERROR_CAMPOSVACIOS);
 		String errorSemanaVacia = (String)map.get("errorSemanaVacia");
-		String errorNoExistente = (String)map.get(Constantes.MAP_NOEXISTENTE);
+		String errorNoExistente = (String)map.get(Constantes.MAP_ERROR_NOEXISTENTE);
 		if(errorCamposVacios != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} 
 		if(errorSemanaVacia != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_MODIFICACION_FALLIDA, errorSemanaVacia), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_MODIFICACION_FALLIDA, errorSemanaVacia), HttpStatus.NOT_FOUND);
 		}
 		if(errorNoExistente != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_MODIFICACION_FALLIDA, errorNoExistente), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_MODIFICACION_FALLIDA, errorNoExistente), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_MODIFICACION_EXITOSA, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_MODIFICACION_EXITOSA, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
 		}
 	}
 	
 	@GetMapping(value = Route.CONSULTAR_TOS)
 	public ResponseEntity<RespuestaPrincipalDto> consultarTodos() {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA, 
+		return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_CONSULTA_EXITOSA,
 				diaSvc.consultarTodos()), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = Route.REGISTRAR)
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody DiaRegistroDto dia) {
 		Map<String, Object> map = diaSvc.registrar(dia);
-		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
+		String errorCamposVacios = (String)map.get(Constantes.MAP_ERROR_CAMPOSVACIOS);
 		String errorSemanaVacia = (String)map.get("errorSemanaVacia");
 		if(errorCamposVacios != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		}
 		if(errorSemanaVacia != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorSemanaVacia), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorSemanaVacia), HttpStatus.BAD_REQUEST);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
 		}
 	}
 

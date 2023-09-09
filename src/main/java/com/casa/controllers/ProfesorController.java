@@ -2,6 +2,7 @@ package com.casa.controllers;
 
 import java.util.Map;
 
+import com.casa.utils.MensajesProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,33 +34,33 @@ public class ProfesorController {
 		String errorCamposVacios = (String)map.get("errorCamposVacios");
 		String errorNoExistente = (String)map.get("errorNoExistente");
 		if(errorCamposVacios != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_MODIFICACION_FALLIDA, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} 
 		if(errorNoExistente != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorNoExistente), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_MODIFICACION_FALLIDA, errorNoExistente), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_MODIFICACION_EXITOSA, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.OK);
 		}
 	}
 	
 	@GetMapping(value = Route.CONSULTAR_TOS)
 	public ResponseEntity<RespuestaPrincipalDto> consultarTodos() {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA, 
+		return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_CONSULTA_EXITOSA,
 				profesorSvc.consultarTodos()), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = Route.REGISTRAR)
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody ProfesorRegistroDto profesor) {
 		Map<String, Object> map = profesorSvc.registrar(profesor);
-		String errorCamposVacios = (String)map.get(Constantes.MAP_CAMPOSVACIOS);
-		String errorSiExiste = (String)map.get(Constantes.MAP_SIEXISTENTE);
+		String errorCamposVacios = (String)map.get(Constantes.MAP_ERROR_CAMPOSVACIOS);
+		String errorSiExiste = (String)map.get(Constantes.MAP_ERROR_SIEXISTENTE);
 		if(errorCamposVacios != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorCamposVacios), HttpStatus.BAD_REQUEST);
 		} 
 		if(errorSiExiste != null) {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_FALLIDO, errorSiExiste), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO, errorSiExiste), HttpStatus.BAD_REQUEST);
 		} else {
-			return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_EXITOSO, map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
 		}
 	}
 

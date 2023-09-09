@@ -1,5 +1,6 @@
 package com.casa.controllers;
 
+import com.casa.utils.MensajesProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,13 +26,13 @@ public class AnnoController {
 	
 	@GetMapping(value = Route.CONSULTAR_TOS)
 	public ResponseEntity<RespuestaPrincipalDto> consultarTodos() {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_CONSULTA_EXITOSA,
+		return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_CONSULTA_EXITOSA,
 				annoSvc.consultarTodos()), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = Route.REGISTRAR)
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody AnnoRegistrarDto anno) {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(Constantes.TTL_REGISTRO_EXITOSO,
+		return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_EXITOSO,
 				annoSvc.registrar(anno)), HttpStatus.CREATED);
 	}
 

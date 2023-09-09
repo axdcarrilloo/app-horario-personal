@@ -6,6 +6,7 @@ import com.casa.domain.entities.*;
 import com.casa.domain.mappers.HorarioMapper;
 import com.casa.repositories.HorarioRepository;
 import com.casa.utils.Constantes;
+import com.casa.utils.MensajesProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +112,7 @@ public class HorarioService {
             }
             map.put(Constantes.MAP_RESPUESTA, horarios);
         } else {
-            map.put("errorDiaVacio", Constantes.MSG_NO_EXISTENTE);
+            map.put("errorDiaVacio", MensajesProperties.MSG_NO_EXISTENTE);
         }
 
         return map;
@@ -150,7 +151,7 @@ public class HorarioService {
             horarioRepository.deleteById(id);
             map.put(Constantes.MAP_RESPUESTA, id);
         } else {
-            map.put(Constantes.MAP_NOEXISTENTE, Constantes.MSG_NO_EXISTENTE);
+            map.put(Constantes.MAP_ERROR_NOEXISTENTE, MensajesProperties.MSG_NO_EXISTENTE);
         }
         return map;
     }
@@ -158,12 +159,12 @@ public class HorarioService {
     public Map<String, Object> registrar(HorarioRegistroDto horario) {
         Map<String, Object> map = new HashMap<>();
         if(Boolean.TRUE.equals(validarCamposRegistrar(horario))) {
-            map.put(Constantes.MAP_CAMPOSVACIOS, Constantes.MSG_CAMPOS_VACIOS);
+            map.put(Constantes.MAP_ERROR_CAMPOSVACIOS, MensajesProperties.MSG_CAMPOS_VACIOS);
             return map;
         }
         DiaEntity dia = diaSvc.consultarPorId( horario.getDia().getId() );
         if(dia == null) {
-            map.put("errorDiaVacio", Constantes.MSG_NO_EXISTENTE);
+            map.put("errorDiaVacio", MensajesProperties.MSG_NO_EXISTENTE);
             return map;
         }
         if(validarHorasPorDia(dia, horario.getHorasDictar(), horario.getIdCurso())) {
@@ -176,16 +177,16 @@ public class HorarioService {
         }
         ProfesorEntity profesor = profesorSvc.consultarPorId(horario.getProfesor().getId());
         if(profesor == null) {
-            map.put("errorProfesorVacio", Constantes.MSG_NO_EXISTENTE);
+            map.put("errorProfesorVacio", MensajesProperties.MSG_NO_EXISTENTE);
             return map;
         }
         MateriaEntity materia = materiaSvc.consultarPorId(horario.getMateria().getId());
         if(materia == null) {
-            map.put("errorMateriaVacia", Constantes.MSG_NO_EXISTENTE);
+            map.put("errorMateriaVacia", MensajesProperties.MSG_NO_EXISTENTE);
             return map;
         }
         if(existenciaPorProfesorMateriaCurso(profesor, materia, horario.getIdCurso())) {
-            map.put("errorDuplicidad", Constantes.MSG_SI_EXISTENTE);
+            map.put("errorDuplicidad", MensajesProperties.MSG_SI_EXISTENTE);
             return map;
         }
         if(validarDuplicidadMateriaCurso(materia, horario.getIdCurso(), dia, horario.getHorasDictar())){
