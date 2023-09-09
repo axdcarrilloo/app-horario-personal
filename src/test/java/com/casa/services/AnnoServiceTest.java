@@ -57,6 +57,20 @@ public class AnnoServiceTest {
     }
 
     @Test
+    void consultarPorIdTestError() {
+        AnnoEntity annoVacio = new AnnoEntity();
+        Optional<AnnoEntity> optional = Optional.of(annoVacio);
+        Mockito.when(annoRepository.findById(9L)).thenReturn(optional);
+
+        AnnoEntity annoValidado = annoSvc.consultarPorId(9L);
+
+        Assertions.assertNull(annoValidado.getId());
+        Assertions.assertNull(annoValidado.getAnno());
+        Assertions.assertNull(annoValidado.getNombre());
+        Assertions.assertNull(annoValidado.getActual());
+    }
+
+    @Test
     void consultarPorIdTestExito() {
         Optional<AnnoEntity> optional = Optional.of(obtenerAnno());
         Mockito.when(annoRepository.findById(12L)).thenReturn(optional);
