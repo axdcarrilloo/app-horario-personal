@@ -1,8 +1,11 @@
 package com.casa.services;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import com.casa.utils.MensajesProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,10 @@ public class AnnoService {
 	
 	@Autowired
 	private AnnoRepository annoRepository;
+
+	private Boolean validarCamposObligatoriosRegistrar(AnnoRegistrarDto annoDto) {
+		return annoDto.getAnno() == null;
+	}
 	
 	public AnnoEntity consultarPorId(Long id) {
 		log.info("AnnoService.class - consultarPorId() -> Consultando por Id un Año...!");
@@ -33,12 +40,18 @@ public class AnnoService {
 		return annoRepository.findAll();
 	}
 	
-	public Long registrar(AnnoRegistrarDto anno) {
-		log.info("AnnoService.class - registrar() -> Registrando Año...!");
-		anno.setNombre(anno.getAnno().toString());
-		anno.setFechaModificacion(Constantes.consultarFechaActual());
-		anno.setFechaRegistro(Constantes.consultarFechaActual());
-		return annoRepository.save(AnnoMapper.convertirDtoAEntity(anno)).getId();
+	public Map<String, Object> registrar(AnnoRegistrarDto anno) {
+		Map<String, Object> map = new HashMap<>();
+		if(validarCamposObligatoriosRegistrar(anno)) {
+			map.put(Constantes.MAP_ERROR_CAMPOSVACIOS, MensajesProperties.MSG_CAMPOS_VACIOS);
+		} else {
+			log.info("AnnoService.class - registrar() -> Registrando Año...!");
+			anno.setNombre(anno.getAnno().toString());
+			anno.setFechaModificacion(Constantes.consultarFechaActual());
+			anno.setFechaRegistro(Constantes.consultarFechaActual());
+			map.put(Constantes.MAP_RESPUESTA,annoRepository.save(AnnoMapper.convertirDtoAEntity(anno)).getId());
+		}
+		return map;
 	}
 
 }

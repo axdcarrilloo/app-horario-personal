@@ -17,6 +17,8 @@ import com.casa.services.AnnoService;
 import com.casa.utils.Constantes;
 import com.casa.utils.Route;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(value = Route.ANNO, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AnnoController {
@@ -32,8 +34,15 @@ public class AnnoController {
 	
 	@PostMapping(value = Route.REGISTRAR)
 	public ResponseEntity<RespuestaPrincipalDto> registrar(@RequestBody AnnoRegistrarDto anno) {
-		return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_EXITOSO,
-				annoSvc.registrar(anno)), HttpStatus.CREATED);
+		Map<String, Object> map = annoSvc.registrar(anno);
+		String errorCamposVacios = (String)map.get(Constantes.MAP_ERROR_CAMPOSVACIOS);
+		if(errorCamposVacios != null) {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_FALLIDO,
+					errorCamposVacios), HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(new RespuestaPrincipalDto(MensajesProperties.TTL_REGISTRO_EXITOSO,
+					map.get(Constantes.MAP_RESPUESTA)), HttpStatus.CREATED);
+		}
 	}
 
 }
