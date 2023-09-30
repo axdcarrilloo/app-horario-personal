@@ -14,8 +14,11 @@ public class HorarioMostrarSimple {
     private String nombreDia;
 
     private Long curso;
+
     private String nombreMateria;
+
     private String nombreProfesor;
+
     private Integer horasDictar;
 
 }

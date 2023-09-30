@@ -29,9 +29,6 @@ public class HorarioService {
     private MateriaService materiaSvc;
 
     @Autowired
-    private ProfesorService profesorSvc;
-
-    @Autowired
     private HorasDiaService horasDiaSvc;
 
     private Boolean validarCamposRegistrar(HorarioRegistroDto horario) {
@@ -45,7 +42,7 @@ public class HorarioService {
         if(horario.getIdCurso() == null) {
             return true;
         }
-        return horario.getProfesor() == null || horario.getProfesor().getId() == null;
+        return horario.getIdProfesor() == null || horario.getIdProfesor() <= 0L;
     }
 
     private Integer sacarHorasCursoPorDia(DiaEntity dia, Long idCurso) {
@@ -83,7 +80,7 @@ public class HorarioService {
         return horasDia;
     }
 
-    public Boolean validarDuplicidadMateriaCurso(MateriaEntity materia, Long idCurso, DiaEntity dia, Integer horasDictar) {
+    private Boolean validarDuplicidadMateriaCurso(MateriaEntity materia, Long idCurso, DiaEntity dia, Integer horasDictar) {
         List<HorarioEntity> horarios = horarioRepository.findByMateriaAndIdCurso(materia, idCurso);
         List<HorasDiaEntity> horasDia = sacarHorasDiaDeHorarios(horarios);
         int sumatoriaHoras = 0;
@@ -107,8 +104,8 @@ public class HorarioService {
         if(dia != null) {
             List<HorasDiaEntity> horasDia = horasDiaSvc.consultarPorDia(dia);
             List<HorarioEntity> horarios = new ArrayList<>();
-            for(HorasDiaEntity horadia : horasDia) {
-                horarios.add(horadia.getHorario());
+            for(HorasDiaEntity horaDia : horasDia) {
+                horarios.add(horaDia.getHorario());
             }
             map.put(Constantes.MAP_RESPUESTA, horarios);
         } else {
@@ -123,14 +120,26 @@ public class HorarioService {
         return horarioRepository.findByIdCurso(idCurso);
     }
 
-    public Boolean existenciaPorProfesorMateriaCurso(ProfesorEntity profesor, MateriaEntity materia, Long idCurso) {
+    public Boolean existenciaPorProfesorMateriaCursoDia(Long idProfesor, MateriaEntity materia, Long idCurso, DiaEntity dia) {
         log.info("HorarioService.class - existenciaPorProfesorMateriaCurso() -> Validando existencia de horario por profesor, materia y curso...!");
-        return consultarPorProfesorMateriaCurso(profesor, materia, idCurso) != null;
+        return consultarPorProfesorMateriaCursoYDia(idProfesor, materia, idCurso, dia) != null;
     }
 
-    public HorarioEntity consultarPorProfesorMateriaCurso(ProfesorEntity profesor, MateriaEntity materia, Long idCurso) {
+    public HorarioEntity consultarPorProfesorMateriaCursoYDia(Long idProfesor, MateriaEntity materia, Long idCurso, DiaEntity dia) {
         log.info("HorarioService.class - consultarPorProfesorMateriaCurso() -> Consultando por profesor, materia y curso...!");
-        return horarioRepository.findByProfesorAndMateriaAndIdCurso(profesor, materia,idCurso);
+        List<HorarioEntity> horarios = horarioRepository.findByIdProfesorAndMateriaAndIdCurso(idProfesor, materia,idCurso);
+        if(horarios.isEmpty()) {
+            return null;
+        }
+        List<HorasDiaEntity> horasDias = horasDiaSvc.consultarPorHorarioYDia(horarios.get(0), dia);
+        if(horasDias.isEmpty()) {
+            return null;
+        }
+        if(horasDias.size() > 1) {
+            return horarios.get(1);
+        } else {
+            return  null;
+        }
     }
 
     public HorarioEntity consultarPorId(Long id) {
@@ -175,8 +184,7 @@ public class HorarioService {
             map.put("errorHorasIngresar", "No se puede ingresar mas de 2 horas en el horario");
             return map;
         }
-        ProfesorEntity profesor = profesorSvc.consultarPorId(horario.getProfesor().getId());
-        if(profesor == null) {
+        if(horario.getIdProfesor() == null) {
             map.put("errorProfesorVacio", MensajesProperties.MSG_NO_EXISTENTE);
             return map;
         }
@@ -185,13 +193,13 @@ public class HorarioService {
             map.put("errorMateriaVacia", MensajesProperties.MSG_NO_EXISTENTE);
             return map;
         }
-        if(existenciaPorProfesorMateriaCurso(profesor, materia, horario.getIdCurso())) {
+        if(existenciaPorProfesorMateriaCursoDia(horario.getIdProfesor(), materia, horario.getIdCurso(), dia)) {
             map.put("errorDuplicidad", MensajesProperties.MSG_SI_EXISTENTE);
             return map;
         }
-        if(validarDuplicidadMateriaCurso(materia, horario.getIdCurso(), dia, horario.getHorasDictar())){
+        if(validarDuplicidadMateriaCurso(materia, horario.getIdCurso(), dia, horario.getHorasDictar())) {
             map.put("errorDuplicidadMateria", "Ya este curso dara la clase de "+materia.getNombre()+" este dia "+dia.getNombre());
-        }else {
+        } else {
             log.info("HorarioService.class - registrar() -> Registrando horario...!");
             HorarioEntity horarioPrincipal = horarioRepository.save(HorarioMapper.convertirDtoAEntity(horario));
             map.put(Constantes.MAP_RESPUESTA, horarioPrincipal.getId());

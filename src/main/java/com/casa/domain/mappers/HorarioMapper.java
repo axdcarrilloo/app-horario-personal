@@ -16,14 +16,14 @@ public class HorarioMapper {
     public static List<HorarioMostrarSimple> convertirEntityADto(List<HorasDiaEntity> horasDia) {
         List<HorarioMostrarSimple> horariosSimplificados = new ArrayList<>();
         for(HorasDiaEntity horaDia : horasDia) {
-            horariosSimplificados.add(new HorarioMostrarSimple(horaDia.getDia().getNombre(), horaDia.getHorario().getIdCurso(),horaDia.getHorario().getMateria().getNombre(),
-                    horaDia.getHorario().getProfesor().getNombres(), horaDia.getCantidadHoras()));
+            horariosSimplificados.add(new HorarioMostrarSimple(horaDia.getDia().getNombre(), horaDia.getHorario().getIdCurso(), horaDia.getHorario().getMateria().getNombre(),
+                    "", horaDia.getCantidadHoras()));
         }
         return horariosSimplificados;
     }
 
     public static HorarioEntity convertirDtoAEntity(HorarioRegistroDto horario) {
-        return new HorarioEntity(0L, horario.getProfesor(), horario.getMateria(),horario.getIdCurso(),
+        return new HorarioEntity(0L, horario.getIdProfesor(), horario.getMateria(),horario.getIdCurso(),
                 Constantes.consultarFechaActual(), Constantes.consultarFechaActual());
     }
 

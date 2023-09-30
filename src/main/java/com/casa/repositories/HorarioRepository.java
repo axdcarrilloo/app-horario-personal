@@ -2,7 +2,6 @@ package com.casa.repositories;
 
 import com.casa.domain.entities.HorarioEntity;
 import com.casa.domain.entities.MateriaEntity;
-import com.casa.domain.entities.ProfesorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +14,5 @@ public interface HorarioRepository extends JpaRepository<HorarioEntity, Long> {
 
     List<HorarioEntity> findByIdCurso(Long idCurso);
 
-    HorarioEntity findByProfesorAndMateriaAndIdCurso(ProfesorEntity profesor, MateriaEntity materia, Long idCurso);
+    List<HorarioEntity> findByIdProfesorAndMateriaAndIdCurso(Long idProfesor, MateriaEntity materia, Long idCurso);
 }

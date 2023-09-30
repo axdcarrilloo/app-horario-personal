@@ -2,7 +2,6 @@ package com.casa.domain.dtos;
 
 import com.casa.domain.entities.DiaEntity;
 import com.casa.domain.entities.MateriaEntity;
-import com.casa.domain.entities.ProfesorEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ public class HorarioRegistroDto {
 
     private MateriaEntity materia;
 
-    private ProfesorEntity profesor;
+    private Long idProfesor;
 
     private Long idCurso;
 

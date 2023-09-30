@@ -29,9 +29,8 @@ public class HorarioEntity {
     @Column(nullable = false, length = 10)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "id_profesor", nullable = false, referencedColumnName = "id")
-	private ProfesorEntity profesor;
+	@Column(nullable = false, name = "id_profesor")
+	private Long idProfesor;
 
 	@ManyToOne
     @JoinColumn(name = "id_materia", nullable = false, referencedColumnName = "id")
