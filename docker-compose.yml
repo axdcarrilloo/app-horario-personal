@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  db_horario:
+    container_name: cont-db-horario
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_HOST=jdbc:mysql://localhost:2000/horario?serverTimezone=UTC
+      - MYSQL_DATABASE=horario
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_TCP_PORT=2000
+    ports:
+      - "2000:2000"
+  #    volumes:
+  #      - ./horarios.sql:/docker-entrypoint-initdb.d/horarios.sql
+  app-horario:
+    container_name: cont-app-horario
+    image: img-app-horario
+    build: .
+    ports:
+      - "2010:2010"
+    environment:
+      - MYSQL_HOST=jdbc:mysql://192.168.1.5:2000/horario?serverTimezone=UTC
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=123456
+    depends_on:
+      - db_horario
